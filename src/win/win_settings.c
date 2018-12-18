@@ -3215,7 +3215,7 @@ static BOOL CALLBACK
 #endif
 win_settings_hard_disks_proc(HWND hdlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    HWND h;
+    HWND h = NULL;
     int old_sel = 0, b = 0, assign = 0;
     const uint8_t hd_icons[2] = { 64, 0 };
 
@@ -4048,7 +4048,7 @@ static BOOL CALLBACK
 #endif
 win_settings_floppy_drives_proc(HWND hdlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    HWND h;
+    HWND h = NULL;
     int i = 0, old_sel = 0;
     WCHAR szText[256];
     const uint8_t fd_icons[15] = { 248, 16, 16, 16, 16, 16, 16, 24, 24, 24, 24, 24, 24, 24, 0 };
@@ -4154,7 +4154,7 @@ static BOOL CALLBACK
 #endif
 win_settings_other_removable_devices_proc(HWND hdlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    HWND h;
+    HWND h = NULL;
     int old_sel = 0, b = 0, assign = 0;
     uint32_t b2 = 0;
     const uint8_t cd_icons[3] = { 249, 32, 0 };

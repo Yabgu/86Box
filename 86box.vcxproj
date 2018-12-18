@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{75FB7DB7-9605-40DA-80DA-7C781286647F}</ProjectGuid>
+    <RootNamespace>My86box</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;RELEASE_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="src\sound\midi_fluidsynth.h" />
+    <ClInclude Include="src\sound\midi_mt32.h" />
+    <ClInclude Include="src\sound\munt\Analog.h" />
+    <ClInclude Include="src\sound\munt\BReverbModel.h" />
+    <ClInclude Include="src\sound\munt\config.h" />
+    <ClInclude Include="src\sound\munt\c_interface\cpp_interface.h" />
+    <ClInclude Include="src\sound\munt\c_interface\c_interface.h" />
+    <ClInclude Include="src\sound\munt\c_interface\c_types.h" />
+    <ClInclude Include="src\sound\munt\Enumerations.h" />
+    <ClInclude Include="src\sound\munt\File.h" />
+    <ClInclude Include="src\sound\munt\FileStream.h" />
+    <ClInclude Include="src\sound\munt\globals.h" />
+    <ClInclude Include="src\sound\munt\internals.h" />
+    <ClInclude Include="src\sound\munt\LA32FloatWaveGenerator.h" />
+    <ClInclude Include="src\sound\munt\LA32Ramp.h" />
+    <ClInclude Include="src\sound\munt\LA32WaveGenerator.h" />
+    <ClInclude Include="src\sound\munt\MemoryRegion.h" />
+    <ClInclude Include="src\sound\munt\MidiEventQueue.h" />
+    <ClInclude Include="src\sound\munt\MidiStreamParser.h" />
+    <ClInclude Include="src\sound\munt\mmath.h" />
+    <ClInclude Include="src\sound\munt\mt32emu.h" />
+    <ClInclude Include="src\sound\munt\Part.h" />
+    <ClInclude Include="src\sound\munt\Partial.h" />
+    <ClInclude Include="src\sound\munt\PartialManager.h" />
+    <ClInclude Include="src\sound\munt\Poly.h" />
+    <ClInclude Include="src\sound\munt\ROMInfo.h" />
+    <ClInclude Include="src\sound\munt\sha1\sha1.h" />
+    <ClInclude Include="src\sound\munt\Structures.h" />
+    <ClInclude Include="src\sound\munt\Synth.h" />
+    <ClInclude Include="src\sound\munt\Tables.h" />
+    <ClInclude Include="src\sound\munt\TVA.h" />
+    <ClInclude Include="src\sound\munt\TVF.h" />
+    <ClInclude Include="src\sound\munt\TVP.h" />
+    <ClInclude Include="src\sound\munt\Types.h" />
+    <ClInclude Include="src\win\plat_dir.h" />
+    <ClInclude Include="src\win\resource.h" />
+    <ClInclude Include="src\win\win.h" />
+    <ClInclude Include="src\win\win_d3d.h" />
+    <ClInclude Include="src\win\win_sdl.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\sound\midi_fluidsynth.c" />
+    <ClCompile Include="src\sound\midi_mt32.c" />
+    <ClCompile Include="src\sound\munt\Analog.cpp" />
+    <ClCompile Include="src\sound\munt\BReverbModel.cpp" />
+    <ClCompile Include="src\sound\munt\c_interface\c_interface.cpp" />
+    <ClCompile Include="src\sound\munt\File.cpp" />
+    <ClCompile Include="src\sound\munt\FileStream.cpp" />
+    <ClCompile Include="src\sound\munt\LA32FloatWaveGenerator.cpp" />
+    <ClCompile Include="src\sound\munt\LA32Ramp.cpp" />
+    <ClCompile Include="src\sound\munt\LA32WaveGenerator.cpp" />
+    <ClCompile Include="src\sound\munt\MidiStreamParser.cpp" />
+    <ClCompile Include="src\sound\munt\Part.cpp" />
+    <ClCompile Include="src\sound\munt\Partial.cpp" />
+    <ClCompile Include="src\sound\munt\PartialManager.cpp" />
+    <ClCompile Include="src\sound\munt\Poly.cpp" />
+    <ClCompile Include="src\sound\munt\ROMInfo.cpp" />
+    <ClCompile Include="src\sound\munt\SampleRateConverter_dummy.cpp" />
+    <ClCompile Include="src\sound\munt\sha1\sha1.cpp" />
+    <ClCompile Include="src\sound\munt\Synth.cpp" />
+    <ClCompile Include="src\sound\munt\Tables.cpp" />
+    <ClCompile Include="src\sound\munt\TVA.cpp" />
+    <ClCompile Include="src\sound\munt\TVF.cpp" />
+    <ClCompile Include="src\sound\munt\TVP.cpp" />
+    <ClCompile Include="src\win\win.c" />
+    <ClCompile Include="src\win\win_d3d.cpp" />
+    <ClCompile Include="src\win\win_jsconf.c" />
+    <ClCompile Include="src\win\win_new_floppy.c" />
+    <ClCompile Include="src\win\win_sdl.c" />
+    <ClCompile Include="src\win\win_settings.c" />
+    <ClCompile Include="src\win\win_snd_gain.c" />
+    <ClCompile Include="src\win\win_ui.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="src\win\86Box.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="packages\sdl2.redist.2.0.5\build\native\sdl2.redist.targets" Condition="Exists('packages\sdl2.redist.2.0.5\build\native\sdl2.redist.targets')" />
+    <Import Project="packages\sdl2.2.0.5\build\native\sdl2.targets" Condition="Exists('packages\sdl2.2.0.5\build\native\sdl2.targets')" />
+  </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('packages\sdl2.redist.2.0.5\build\native\sdl2.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\sdl2.redist.2.0.5\build\native\sdl2.redist.targets'))" />
+    <Error Condition="!Exists('packages\sdl2.2.0.5\build\native\sdl2.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\sdl2.2.0.5\build\native\sdl2.targets'))" />
+  </Target>
+</Project>

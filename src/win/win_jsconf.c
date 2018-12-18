@@ -47,7 +47,7 @@ static void rebuild_axis_button_selections(HWND hdlg)
                                 SendMessage(h, CB_ADDSTRING, 0, (LPARAM)(LPCSTR)plat_joystick_state[joystick-1].axis[d].name);
                                 if (c < AXIS_STRINGS_MAX)
                                 {
-                                        if (!stricmp(axis_strings[c], plat_joystick_state[joystick-1].axis[d].name))
+                                        if (!_stricmp(axis_strings[c], plat_joystick_state[joystick-1].axis[d].name))
                                                 sel = d;
                                 }
                         }

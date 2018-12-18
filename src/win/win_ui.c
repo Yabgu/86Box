@@ -720,7 +720,7 @@ ui_init(int nCmdShow)
     WNDCLASSEX wincl;			/* buffer for main window's class */
     RAWINPUTDEVICE ridev;		/* RawInput device */
     MSG messages;			/* received-messages buffer */
-    HWND hwnd;				/* handle for our window */
+    HWND hwnd = NULL;				/* handle for our window */
     HACCEL haccel;			/* handle to accelerator table */
     int bRet;
 

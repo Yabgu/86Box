@@ -314,7 +314,7 @@ set_intr(hdc_t *dev)
 
 /* Get the logical (block) address of a CHS triplet. */
 static int
-get_sector(hdc_t *dev, drive_t *drive, off64_t *addr)
+get_sector(hdc_t *dev, drive_t *drive, _off64_t *addr)
 {
     if (drive->cur_cyl != dev->track) {
 	xta_log("%s: get_sector: wrong cylinder %d/%d\n",
@@ -336,7 +336,7 @@ get_sector(hdc_t *dev, drive_t *drive, off64_t *addr)
     }
 
     /* Calculate logical address (block number) of desired sector. */
-    *addr = ((((off64_t) dev->track*drive->hpc) + \
+    *addr = ((((_off64_t) dev->track*drive->hpc) + \
 	      dev->head)*drive->spt) + dev->sector;
 
     return(0);
@@ -380,7 +380,7 @@ do_format(hdc_t *dev, drive_t *drive, dcb_t *dcb)
 {
     int start_cyl, end_cyl;
     int start_hd, end_hd;
-    off64_t addr;
+    _off64_t addr;
     int h, s;
 
     /* Get the parameters from the DCB. */
@@ -451,7 +451,7 @@ hdc_callback(void *priv)
     dcb_t *dcb = &dev->dcb;
     drive_t *drive;
     dprm_t *params;
-    off64_t addr;
+    _off64_t addr;
     int no_data = 0;
     int val;
 

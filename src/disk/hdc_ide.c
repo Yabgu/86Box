@@ -614,18 +614,18 @@ ide_identify(ide_t *ide)
 /*
  * Return the sector offset for the current register values
  */
-static off64_t
+static _off64_t
 ide_get_sector(ide_t *ide)
 {
     uint32_t heads, sectors;
 
     if (ide->lba)
-	return (off64_t)ide->lba_addr + ide->skip512;
+	return (_off64_t)ide->lba_addr + ide->skip512;
     else {
 	heads = ide->cfg_hpc;
 	sectors = ide->cfg_spt;
 
-	return ((((off64_t) ide->cylinder * heads) + ide->head) *
+	return ((((_off64_t) ide->cylinder * heads) + ide->head) *
 		sectors) + (ide->sector - 1) + ide->skip512;
     }
 }

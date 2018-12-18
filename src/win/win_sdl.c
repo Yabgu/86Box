@@ -53,7 +53,7 @@
 #define UNICODE
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 #define PNG_DEBUG 0
 #include <png.h>

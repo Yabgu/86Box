@@ -658,14 +658,14 @@ NewFloppyDialogProcedure(HWND hdlg, UINT message, WPARAM wParam, LPARAM lParam)
 					ext_offs = wcs_len - 4;
 					ext = &(wopenfilestring[ext_offs]);
 					if (is_zip) {
-						if (((wcs_len >= 4) && !wcsicmp(ext, L".ZDI")))
+						if (((wcs_len >= 4) && !_wcsicmp(ext, L".ZDI")))
 							file_type = 1;
 						else
 							file_type = 0;
 					} else {
-						if (((wcs_len >= 4) && !wcsicmp(ext, L".FDI")))
+						if (((wcs_len >= 4) && !_wcsicmp(ext, L".FDI")))
 							file_type = 1;
-						else if ((((wcs_len >= 4) && !wcsicmp(ext, L".86F")) || (filterindex == 3)))
+						else if ((((wcs_len >= 4) && !_wcsicmp(ext, L".86F")) || (filterindex == 3)))
 							file_type = 2;
 						else
 							file_type = 0;

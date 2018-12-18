@@ -36,7 +36,7 @@
 # define fopen64        fopen
 # define fseeko64       fseeko
 # define ftello64       ftello
-# define off64_t        off_t
+# define _off64_t        off_t
 #endif
 
 

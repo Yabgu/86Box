@@ -167,7 +167,7 @@ irq_lower(mfm_t *mfm)
  * geometry information...
  */
 static int
-get_sector(mfm_t *mfm, off64_t *addr)
+get_sector(mfm_t *mfm, _off64_t *addr)
 {
     drive_t *drive = &mfm->drives[mfm->drvsel];
 
@@ -201,7 +201,7 @@ get_sector(mfm_t *mfm, off64_t *addr)
     }
 #endif
 
-    *addr = ((((off64_t) mfm->cylinder * drive->cfg_hpc) + mfm->head) *
+    *addr = ((((_off64_t) mfm->cylinder * drive->cfg_hpc) + mfm->head) *
 			 drive->cfg_spt) + (mfm->sector - 1);
 
     return(0);
@@ -559,7 +559,7 @@ do_callback(void *priv)
 {
     mfm_t *mfm = (mfm_t *)priv;
     drive_t *drive = &mfm->drives[mfm->drvsel];
-    off64_t addr;
+    _off64_t addr;
 
     mfm->callback = 0LL;
     if (mfm->reset) {

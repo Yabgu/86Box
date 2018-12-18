@@ -288,9 +288,8 @@ static __inline void x87_stmmx(MMX_REG r)
 
 static __inline uint16_t x87_compare(double a, double b)
 {
+	uint32_t result;
 #if defined i386 || defined __i386 || defined __i386__ || defined _X86_ || defined _WIN32
-        uint32_t result;
-
 	if (!is386)
 	{
 		if (((a == INFINITY) || (a == -INFINITY)) && ((b == INFINITY) || (b == -INFINITY)))

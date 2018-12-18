@@ -376,8 +376,8 @@ WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR lpszArg, int nCmdShow)
     }
 
     /* Cleanup: we may no longer need the console. */
-    if (! force_debug)
-	CreateConsole(0);
+    /*if (! force_debug)
+		CreateConsole(0);*/
 
     /* Handle our GUI. */
     i = ui_init(nCmdShow);

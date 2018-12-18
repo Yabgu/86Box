@@ -1,0 +1,240 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="win">
+      <UniqueIdentifier>{e00f9b06-697e-408e-906b-9e2b52922358}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sound">
+      <UniqueIdentifier>{09c42686-b9dd-423d-b81f-618fdd31a2b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sound\munt">
+      <UniqueIdentifier>{c7a6a1eb-ceb6-481f-b615-51ce4ac053f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sound\munt\sha1">
+      <UniqueIdentifier>{8db0dc1a-135b-40df-a508-4fd41d9ef8b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sound\munt\c_interface">
+      <UniqueIdentifier>{598ae006-32c7-4023-bd30-d60a67648059}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\win\plat_dir.h">
+      <Filter>win</Filter>
+    </ClInclude>
+    <ClInclude Include="src\win\resource.h">
+      <Filter>win</Filter>
+    </ClInclude>
+    <ClInclude Include="src\win\win.h">
+      <Filter>win</Filter>
+    </ClInclude>
+    <ClInclude Include="src\win\win_d3d.h">
+      <Filter>win</Filter>
+    </ClInclude>
+    <ClInclude Include="src\win\win_sdl.h">
+      <Filter>win</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sound\midi_fluidsynth.h">
+      <Filter>sound</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sound\midi_mt32.h">
+      <Filter>sound</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sound\munt\Analog.h">
+      <Filter>sound\munt</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sound\munt\BReverbModel.h">
+      <Filter>sound\munt</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sound\munt\config.h">
+      <Filter>sound\munt</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sound\munt\Enumerations.h">
+      <Filter>sound\munt</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sound\munt\File.h">
+      <Filter>sound\munt</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sound\munt\FileStream.h">
+      <Filter>sound\munt</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sound\munt\globals.h">
+      <Filter>sound\munt</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sound\munt\internals.h">
+      <Filter>sound\munt</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sound\munt\LA32FloatWaveGenerator.h">
+      <Filter>sound\munt</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sound\munt\LA32Ramp.h">
+      <Filter>sound\munt</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sound\munt\LA32WaveGenerator.h">
+      <Filter>sound\munt</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sound\munt\MemoryRegion.h">
+      <Filter>sound\munt</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sound\munt\MidiEventQueue.h">
+      <Filter>sound\munt</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sound\munt\MidiStreamParser.h">
+      <Filter>sound\munt</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sound\munt\mmath.h">
+      <Filter>sound\munt</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sound\munt\mt32emu.h">
+      <Filter>sound\munt</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sound\munt\Part.h">
+      <Filter>sound\munt</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sound\munt\Partial.h">
+      <Filter>sound\munt</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sound\munt\PartialManager.h">
+      <Filter>sound\munt</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sound\munt\Poly.h">
+      <Filter>sound\munt</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sound\munt\ROMInfo.h">
+      <Filter>sound\munt</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sound\munt\Structures.h">
+      <Filter>sound\munt</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sound\munt\Synth.h">
+      <Filter>sound\munt</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sound\munt\Tables.h">
+      <Filter>sound\munt</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sound\munt\TVA.h">
+      <Filter>sound\munt</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sound\munt\TVF.h">
+      <Filter>sound\munt</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sound\munt\TVP.h">
+      <Filter>sound\munt</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sound\munt\Types.h">
+      <Filter>sound\munt</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sound\munt\sha1\sha1.h">
+      <Filter>sound\munt\sha1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sound\munt\c_interface\c_interface.h">
+      <Filter>sound\munt\c_interface</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sound\munt\c_interface\c_types.h">
+      <Filter>sound\munt\c_interface</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sound\munt\c_interface\cpp_interface.h">
+      <Filter>sound\munt\c_interface</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\win\win.c">
+      <Filter>win</Filter>
+    </ClCompile>
+    <ClCompile Include="src\win\win_d3d.cpp">
+      <Filter>win</Filter>
+    </ClCompile>
+    <ClCompile Include="src\win\win_jsconf.c">
+      <Filter>win</Filter>
+    </ClCompile>
+    <ClCompile Include="src\win\win_new_floppy.c">
+      <Filter>win</Filter>
+    </ClCompile>
+    <ClCompile Include="src\win\win_sdl.c">
+      <Filter>win</Filter>
+    </ClCompile>
+    <ClCompile Include="src\win\win_settings.c">
+      <Filter>win</Filter>
+    </ClCompile>
+    <ClCompile Include="src\win\win_snd_gain.c">
+      <Filter>win</Filter>
+    </ClCompile>
+    <ClCompile Include="src\win\win_ui.c">
+      <Filter>win</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sound\midi_fluidsynth.c">
+      <Filter>sound</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sound\midi_mt32.c">
+      <Filter>sound</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sound\munt\Analog.cpp">
+      <Filter>sound\munt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sound\munt\BReverbModel.cpp">
+      <Filter>sound\munt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sound\munt\File.cpp">
+      <Filter>sound\munt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sound\munt\FileStream.cpp">
+      <Filter>sound\munt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sound\munt\LA32FloatWaveGenerator.cpp">
+      <Filter>sound\munt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sound\munt\LA32Ramp.cpp">
+      <Filter>sound\munt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sound\munt\LA32WaveGenerator.cpp">
+      <Filter>sound\munt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sound\munt\MidiStreamParser.cpp">
+      <Filter>sound\munt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sound\munt\Part.cpp">
+      <Filter>sound\munt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sound\munt\Partial.cpp">
+      <Filter>sound\munt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sound\munt\PartialManager.cpp">
+      <Filter>sound\munt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sound\munt\Poly.cpp">
+      <Filter>sound\munt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sound\munt\ROMInfo.cpp">
+      <Filter>sound\munt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sound\munt\SampleRateConverter_dummy.cpp">
+      <Filter>sound\munt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sound\munt\Synth.cpp">
+      <Filter>sound\munt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sound\munt\Tables.cpp">
+      <Filter>sound\munt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sound\munt\TVA.cpp">
+      <Filter>sound\munt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sound\munt\TVF.cpp">
+      <Filter>sound\munt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sound\munt\TVP.cpp">
+      <Filter>sound\munt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sound\munt\sha1\sha1.cpp">
+      <Filter>sound\munt\sha1</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sound\munt\c_interface\c_interface.cpp">
+      <Filter>sound\munt\c_interface</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="src\win\86Box.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+</Project>

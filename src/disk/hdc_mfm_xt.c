@@ -306,7 +306,7 @@ mfm_error(mfm_t *mfm, uint8_t error)
 
 
 static int
-get_sector(mfm_t *mfm, off64_t *addr)
+get_sector(mfm_t *mfm, _off64_t *addr)
 {
     drive_t *drive = &mfm->drives[mfm->drive_sel];
     int heads = drive->cfg_hpc;
@@ -332,7 +332,7 @@ get_sector(mfm_t *mfm, off64_t *addr)
 	return(1);
     }
 
-    *addr = ((((off64_t) mfm->cylinder * heads) + mfm->head) *
+    *addr = ((((_off64_t) mfm->cylinder * heads) + mfm->head) *
 			  17) + mfm->sector;
 	
     return(0);
@@ -364,7 +364,7 @@ mfm_callback(void *priv)
 {
     mfm_t *mfm = (mfm_t *)priv;
     drive_t *drive;
-    off64_t addr;
+    _off64_t addr;
 
     mfm->callback = 0LL;
 

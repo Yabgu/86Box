@@ -150,7 +150,7 @@ irq_lower(esdi_t *esdi)
 
 /* Return the sector offset for the current register values. */
 static int
-get_sector(esdi_t *esdi, off64_t *addr)
+get_sector(esdi_t *esdi, _off64_t *addr)
 {
     drive_t *drive = &esdi->drives[esdi->drive_sel];
     int heads = drive->cfg_hpc;
@@ -168,7 +168,7 @@ get_sector(esdi_t *esdi, off64_t *addr)
     }
 
     if (drive->cfg_spt==drive->real_spt && drive->cfg_hpc==drive->real_hpc) {
-	*addr = ((((off64_t) esdi->cylinder * heads) + esdi->head) *
+	*addr = ((((_off64_t) esdi->cylinder * heads) + esdi->head) *
 					sectors) + (esdi->sector - 1);
     } else {
 	/*
@@ -176,14 +176,14 @@ get_sector(esdi_t *esdi, off64_t *addr)
 	 * sector per track inaccessible (spare sector)
 	 */
 
-	*addr = ((((off64_t) esdi->cylinder * heads) + esdi->head) *
+	*addr = ((((_off64_t) esdi->cylinder * heads) + esdi->head) *
 					sectors) + (esdi->sector - 1);
 
 	s = *addr % (drive->real_spt - 1);
 	h = (*addr / (drive->real_spt - 1)) % drive->real_hpc;
 	c = (*addr / (drive->real_spt - 1)) / drive->real_hpc;
 
-	*addr = ((((off64_t)c * drive->real_hpc) + h) * drive->real_spt) + s;
+	*addr = ((((_off64_t)c * drive->real_hpc) + h) * drive->real_spt) + s;
     }
         
     return(0);
@@ -485,7 +485,7 @@ esdi_callback(void *priv)
 {
     esdi_t *esdi = (esdi_t *)priv;
     drive_t *drive = &esdi->drives[esdi->drive_sel];
-    off64_t addr;
+    _off64_t addr;
 
     esdi->callback = 0LL;
     if (esdi->reset) {
