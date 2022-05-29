@@ -291,7 +291,7 @@ mmutranslatereal_normal(uint32_t addr, int rw)
     uint32_t temp, temp2, temp3;
     uint32_t addr2;
 
-    if (cpu_state.abrt)
+    if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false))
 	return 0xffffffffffffffffULL;
 
     addr2 = ((cr3 & ~0xfff) + ((addr >> 20) & 0xffc));
@@ -355,7 +355,7 @@ mmutranslatereal_pae(uint32_t addr, int rw)
     uint64_t temp, temp2, temp3, temp4;
     uint64_t addr2, addr3, addr4;
 
-    if (cpu_state.abrt)
+    if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false))
 	return 0xffffffffffffffffULL;
 
     addr2 = (cr3 & ~0x1f) + ((addr >> 27) & 0x18);
@@ -428,7 +428,7 @@ uint64_t
 mmutranslatereal(uint32_t addr, int rw)
 {
     /* Fast path to return invalid without any call if an exception has occurred beforehand. */
-    if (cpu_state.abrt)
+    if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false))
 	return 0xffffffffffffffffULL;
 
     if (cr4 & CR4_PAE)
@@ -443,7 +443,7 @@ uint32_t
 mmutranslatereal32(uint32_t addr, int rw)
 {
     /* Fast path to return invalid without any call if an exception has occurred beforehand. */
-    if (cpu_state.abrt)
+    if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false))
 	return (uint32_t) 0xffffffffffffffffULL;
 
     return (uint32_t) mmutranslatereal(addr, rw);
@@ -456,7 +456,7 @@ mmutranslate_noabrt_normal(uint32_t addr, int rw)
     uint32_t temp,temp2,temp3;
     uint32_t addr2;
 
-    if (cpu_state.abrt)
+    if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false))
 	return 0xffffffffffffffffULL;
 
     addr2 = ((cr3 & ~0xfff) + ((addr >> 20) & 0xffc));
@@ -489,7 +489,7 @@ mmutranslate_noabrt_pae(uint32_t addr, int rw)
     uint64_t temp,temp2,temp3,temp4;
     uint64_t addr2,addr3,addr4;
 
-    if (cpu_state.abrt)
+    if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false))
 	return 0xffffffffffffffffULL;
 
     addr2 = (cr3 & ~0x1f) + ((addr >> 27) & 0x18);
@@ -528,7 +528,7 @@ uint64_t
 mmutranslate_noabrt(uint32_t addr, int rw)
 {
     /* Fast path to return invalid without any call if an exception has occurred beforehand. */
-    if (cpu_state.abrt)
+    if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false))
 	return 0xffffffffffffffffULL;
 
     if (cr4 & CR4_PAE)

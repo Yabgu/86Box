@@ -256,7 +256,7 @@ reset_common(int hard)
 
     use32 = 0;
     cpu_cur_status = 0;
-    stack32 = 0;
+    stack32 = false;
     msr.fcr = (1 << 8) | (1 << 9) | (1 << 12) |  (1 << 16) | (1 << 19) | (1 << 21);
     msw = 0;
     if (hascache)

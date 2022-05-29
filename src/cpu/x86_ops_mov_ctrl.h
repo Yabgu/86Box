@@ -8,7 +8,7 @@ static int opMOV_r_CRx_a16(uint32_t fetchdat)
         fetch_ea_16(fetchdat);
         switch (cpu_reg)
         {
-                case 0:
+        case 0:
                 cpu_state.regs[cpu_rm].l = cr0;
                 if (is486 || isibm486)
                         cpu_state.regs[cpu_rm].l |= 0x10; /*ET hardwired on 486*/
@@ -19,19 +19,19 @@ static int opMOV_r_CRx_a16(uint32_t fetchdat)
 				cpu_state.regs[cpu_rm].l |=0x7ffffff0;
 		}
                 break;
-                case 2:
+        case 2:
                 cpu_state.regs[cpu_rm].l = cr2;
                 break;
-                case 3:
+        case 3:
                 cpu_state.regs[cpu_rm].l = cr3;
                 break;
-                case 4:
+        case 4:
                 if (cpu_has_feature(CPU_FEATURE_CR4))
                 {
                         cpu_state.regs[cpu_rm].l = cr4;
                         break;
                 }
-                default:
+        default:
                 cpu_state.pc = cpu_state.oldpc;
                 x86illegal();
                 break;

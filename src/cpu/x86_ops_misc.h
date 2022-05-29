@@ -56,12 +56,12 @@ static int opF6_a16(uint32_t fetchdat)
 		SEG_CHECK_READ(cpu_state.ea_seg);
                 CHECK_READ(cpu_state.ea_seg, cpu_state.eaaddr, cpu_state.eaaddr);
         }
-        dst = geteab();                 if (cpu_state.abrt) return 1;
+        dst = geteab();                 if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         switch (rmdat & 0x38)
         {
                 case 0x00: /*TEST b,#8*/
 		case 0x08:
-                src = readmemb(cs, cpu_state.pc); cpu_state.pc++;           if (cpu_state.abrt) return 1;
+                src = readmemb(cs, cpu_state.pc); cpu_state.pc++;           if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
                 setznp8(src & dst);
                 if (is486) { CLOCK_CYCLES((cpu_mod == 3) ? 1 : 2); }
                 else       { CLOCK_CYCLES((cpu_mod == 3) ? 2 : 5); }
@@ -70,14 +70,14 @@ static int opF6_a16(uint32_t fetchdat)
                 case 0x10: /*NOT b*/
                 if (cpu_mod != 3)
                         SEG_CHECK_WRITE(cpu_state.ea_seg);
-                seteab(~dst);                           if (cpu_state.abrt) return 1;
+                seteab(~dst);                           if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
                 CLOCK_CYCLES((cpu_mod == 3) ? timing_rr : timing_mm);
                 PREFETCH_RUN((cpu_mod == 3) ? timing_rr : timing_mm, 2, rmdat, (cpu_mod == 3) ? 0:1,0,(cpu_mod == 3) ? 0:1,0, 0);
                 break;
                 case 0x18: /*NEG b*/
                 if (cpu_mod != 3)
                         SEG_CHECK_WRITE(cpu_state.ea_seg);
-                seteab(0 - dst);                        if (cpu_state.abrt) return 1;
+                seteab(0 - dst);                        if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
                 setsub8(0, dst);
                 CLOCK_CYCLES((cpu_mod == 3) ? timing_rr : timing_mm);
                 PREFETCH_RUN((cpu_mod == 3) ? timing_rr : timing_mm, 2, rmdat, (cpu_mod == 3) ? 0:1,0,(cpu_mod == 3) ? 0:1,0, 0);
@@ -160,12 +160,12 @@ static int opF6_a32(uint32_t fetchdat)
         fetch_ea_32(fetchdat);
         if (cpu_mod != 3)
                 SEG_CHECK_READ(cpu_state.ea_seg);
-        dst = geteab();                 if (cpu_state.abrt) return 1;
+        dst = geteab();                 if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         switch (rmdat & 0x38)
         {
                 case 0x00: /*TEST b,#8*/
                 case 0x08:
-                src = readmemb(cs, cpu_state.pc); cpu_state.pc++;           if (cpu_state.abrt) return 1;
+                src = readmemb(cs, cpu_state.pc); cpu_state.pc++;           if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
                 setznp8(src & dst);
                 if (is486) { CLOCK_CYCLES((cpu_mod == 3) ? 1 : 2); }
                 else       { CLOCK_CYCLES((cpu_mod == 3) ? 2 : 5); }
@@ -174,14 +174,14 @@ static int opF6_a32(uint32_t fetchdat)
                 case 0x10: /*NOT b*/
                 if (cpu_mod != 3)
                         SEG_CHECK_WRITE(cpu_state.ea_seg);
-                seteab(~dst);                           if (cpu_state.abrt) return 1;
+                seteab(~dst);                           if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
                 CLOCK_CYCLES((cpu_mod == 3) ? timing_rr : timing_mm);
                 PREFETCH_RUN((cpu_mod == 3) ? timing_rr : timing_mm, 2, rmdat, (cpu_mod == 3) ? 0:1,0,(cpu_mod == 3) ? 0:1,0, 1);
                 break;
                 case 0x18: /*NEG b*/
                 if (cpu_mod != 3)
                         SEG_CHECK_WRITE(cpu_state.ea_seg);
-                seteab(0 - dst);                        if (cpu_state.abrt) return 1;
+                seteab(0 - dst);                        if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
                 setsub8(0, dst);
                 CLOCK_CYCLES((cpu_mod == 3) ? timing_rr : timing_mm);
                 PREFETCH_RUN((cpu_mod == 3) ? timing_rr : timing_mm, 2, rmdat, (cpu_mod == 3) ? 0:1,0,(cpu_mod == 3) ? 0:1,0, 1);
@@ -267,12 +267,12 @@ static int opF7_w_a16(uint32_t fetchdat)
         fetch_ea_16(fetchdat);
         if (cpu_mod != 3)
                 SEG_CHECK_READ(cpu_state.ea_seg);
-        dst = geteaw();        if (cpu_state.abrt) return 1;
+        dst = geteaw();        if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         switch (rmdat & 0x38)
         {
                 case 0x00: /*TEST w*/
                 case 0x08:
-                src = getword();        if (cpu_state.abrt) return 1;
+                src = getword();        if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
                 setznp16(src & dst);
                 if (is486) { CLOCK_CYCLES((cpu_mod == 3) ? 1 : 2); }
                 else       { CLOCK_CYCLES((cpu_mod == 3) ? 2 : 5); }
@@ -281,14 +281,14 @@ static int opF7_w_a16(uint32_t fetchdat)
                 case 0x10: /*NOT w*/
                 if (cpu_mod != 3)
                         SEG_CHECK_WRITE(cpu_state.ea_seg);
-                seteaw(~dst);           if (cpu_state.abrt) return 1;
+                seteaw(~dst);           if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
                 CLOCK_CYCLES((cpu_mod == 3) ? timing_rr : timing_mm);
                 PREFETCH_RUN((cpu_mod == 3) ? timing_rr : timing_mm, 2, rmdat, (cpu_mod == 3) ? 0:1,0,(cpu_mod == 3) ? 0:1,0, 0);
                 break;
                 case 0x18: /*NEG w*/
                 if (cpu_mod != 3)
                         SEG_CHECK_WRITE(cpu_state.ea_seg);
-                seteaw(0 - dst);        if (cpu_state.abrt) return 1;
+                seteaw(0 - dst);        if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
                 setsub16(0, dst);
                 CLOCK_CYCLES((cpu_mod == 3) ? timing_rr : timing_mm);
                 PREFETCH_RUN((cpu_mod == 3) ? timing_rr : timing_mm, 2, rmdat, (cpu_mod == 3) ? 0:1,0,(cpu_mod == 3) ? 0:1,0, 0);
@@ -364,12 +364,12 @@ static int opF7_w_a32(uint32_t fetchdat)
         fetch_ea_32(fetchdat);
         if (cpu_mod != 3)
                 SEG_CHECK_READ(cpu_state.ea_seg);
-        dst = geteaw();        if (cpu_state.abrt) return 1;
+        dst = geteaw();        if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         switch (rmdat & 0x38)
         {
                 case 0x00: /*TEST w*/
                 case 0x08:
-                src = getword();        if (cpu_state.abrt) return 1;
+                src = getword();        if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
                 setznp16(src & dst);
                 if (is486) { CLOCK_CYCLES((cpu_mod == 3) ? 1 : 2); }
                 else       { CLOCK_CYCLES((cpu_mod == 3) ? 2 : 5); }
@@ -378,14 +378,14 @@ static int opF7_w_a32(uint32_t fetchdat)
                 case 0x10: /*NOT w*/
                 if (cpu_mod != 3)
                         SEG_CHECK_WRITE(cpu_state.ea_seg);
-                seteaw(~dst);           if (cpu_state.abrt) return 1;
+                seteaw(~dst);           if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
                 CLOCK_CYCLES((cpu_mod == 3) ? timing_rr : timing_mm);
                 PREFETCH_RUN((cpu_mod == 3) ? timing_rr : timing_mm, 2, rmdat, (cpu_mod == 3) ? 0:1,0,(cpu_mod == 3) ? 0:1,0, 1);
                 break;
                 case 0x18: /*NEG w*/
                 if (cpu_mod != 3)
                         SEG_CHECK_WRITE(cpu_state.ea_seg);
-                seteaw(0 - dst);        if (cpu_state.abrt) return 1;
+                seteaw(0 - dst);        if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
                 setsub16(0, dst);
                 CLOCK_CYCLES((cpu_mod == 3) ? timing_rr : timing_mm);
                 PREFETCH_RUN((cpu_mod == 3) ? timing_rr : timing_mm, 2, rmdat, (cpu_mod == 3) ? 0:1,0,(cpu_mod == 3) ? 0:1,0, 1);
@@ -461,13 +461,13 @@ static int opF7_l_a16(uint32_t fetchdat)
         fetch_ea_16(fetchdat);
         if (cpu_mod != 3)
                 SEG_CHECK_READ(cpu_state.ea_seg);
-        dst = geteal();                 if (cpu_state.abrt) return 1;
+        dst = geteal();                 if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
 
         switch (rmdat & 0x38)
         {
                 case 0x00: /*TEST l*/
                 case 0x08:
-                src = getlong();        if (cpu_state.abrt) return 1;
+                src = getlong();        if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
                 setznp32(src & dst);
                 if (is486) { CLOCK_CYCLES((cpu_mod == 3) ? 1 : 2); }
                 else       { CLOCK_CYCLES((cpu_mod == 3) ? 2 : 5); }
@@ -476,14 +476,14 @@ static int opF7_l_a16(uint32_t fetchdat)
                 case 0x10: /*NOT l*/
                 if (cpu_mod != 3)
                         SEG_CHECK_WRITE(cpu_state.ea_seg);
-                seteal(~dst);           if (cpu_state.abrt) return 1;
+                seteal(~dst);           if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
                 CLOCK_CYCLES((cpu_mod == 3) ? timing_rr : timing_mml);
                 PREFETCH_RUN((cpu_mod == 3) ? timing_rr : timing_mm, 2, rmdat, 0,(cpu_mod == 3) ? 0:1,0,(cpu_mod == 3) ? 0:1, 0);
                 break;
                 case 0x18: /*NEG l*/
                 if (cpu_mod != 3)
                         SEG_CHECK_WRITE(cpu_state.ea_seg);
-                seteal(0 - dst);        if (cpu_state.abrt) return 1;
+                seteal(0 - dst);        if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
                 setsub32(0, dst);
                 CLOCK_CYCLES((cpu_mod == 3) ? timing_rr : timing_mml);
                 PREFETCH_RUN((cpu_mod == 3) ? timing_rr : timing_mm, 2, rmdat, 0,(cpu_mod == 3) ? 0:1,0,(cpu_mod == 3) ? 0:1, 0);
@@ -536,13 +536,13 @@ static int opF7_l_a32(uint32_t fetchdat)
         fetch_ea_32(fetchdat);
         if (cpu_mod != 3)
                 SEG_CHECK_READ(cpu_state.ea_seg);
-        dst = geteal();                 if (cpu_state.abrt) return 1;
+        dst = geteal();                 if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
 
         switch (rmdat & 0x38)
         {
                 case 0x00: /*TEST l*/
                 case 0x08:
-                src = getlong();        if (cpu_state.abrt) return 1;
+                src = getlong();        if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
                 setznp32(src & dst);
                 if (is486) { CLOCK_CYCLES((cpu_mod == 3) ? 1 : 2); }
                 else       { CLOCK_CYCLES((cpu_mod == 3) ? 2 : 5); }
@@ -551,14 +551,14 @@ static int opF7_l_a32(uint32_t fetchdat)
                 case 0x10: /*NOT l*/
                 if (cpu_mod != 3)
                         SEG_CHECK_WRITE(cpu_state.ea_seg);
-                seteal(~dst);           if (cpu_state.abrt) return 1;
+                seteal(~dst);           if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
                 CLOCK_CYCLES((cpu_mod == 3) ? timing_rr : timing_mml);
                 PREFETCH_RUN((cpu_mod == 3) ? timing_rr : timing_mm, 2, rmdat, 0,(cpu_mod == 3) ? 0:1,0,(cpu_mod == 3) ? 0:1, 1);
                 break;
                 case 0x18: /*NEG l*/
                 if (cpu_mod != 3)
                         SEG_CHECK_WRITE(cpu_state.ea_seg);
-                seteal(0 - dst);        if (cpu_state.abrt) return 1;
+                seteal(0 - dst);        if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
                 setsub32(0, dst);
                 CLOCK_CYCLES((cpu_mod == 3) ? timing_rr : timing_mml);
                 PREFETCH_RUN((cpu_mod == 3) ? timing_rr : timing_mm, 2, rmdat, 0,(cpu_mod == 3) ? 0:1,0,(cpu_mod == 3) ? 0:1, 1);
@@ -637,7 +637,7 @@ static int opHLT(uint32_t fetchdat)
 static int opLOCK(uint32_t fetchdat)
 {
         fetchdat = fastreadl(cs + cpu_state.pc);
-        if (cpu_state.abrt) return 0;
+        if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 0;
         cpu_state.pc++;
 
         ILLEGAL_ON((fetchdat & 0xff) == 0x90);
@@ -657,7 +657,7 @@ static int opBOUND_w_a16(uint32_t fetchdat)
         ILLEGAL_ON(cpu_mod == 3);
         SEG_CHECK_READ(cpu_state.ea_seg);
         low = geteaw();
-        high = readmemw(easeg, cpu_state.eaaddr + 2);     if (cpu_state.abrt) return 1;
+        high = readmemw(easeg, cpu_state.eaaddr + 2);     if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
 
         if (((int16_t)cpu_state.regs[cpu_reg].w < low) || ((int16_t)cpu_state.regs[cpu_reg].w > high))
         {
@@ -677,7 +677,7 @@ static int opBOUND_w_a32(uint32_t fetchdat)
         ILLEGAL_ON(cpu_mod == 3);
         SEG_CHECK_READ(cpu_state.ea_seg);
         low = geteaw();
-        high = readmemw(easeg, cpu_state.eaaddr + 2);     if (cpu_state.abrt) return 1;
+        high = readmemw(easeg, cpu_state.eaaddr + 2);     if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
 
         if (((int16_t)cpu_state.regs[cpu_reg].w < low) || ((int16_t)cpu_state.regs[cpu_reg].w > high))
         {
@@ -698,7 +698,7 @@ static int opBOUND_l_a16(uint32_t fetchdat)
         ILLEGAL_ON(cpu_mod == 3);
         SEG_CHECK_READ(cpu_state.ea_seg);
         low = geteal();
-        high = readmeml(easeg, cpu_state.eaaddr + 4);     if (cpu_state.abrt) return 1;
+        high = readmeml(easeg, cpu_state.eaaddr + 4);     if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
 
         if (((int32_t)cpu_state.regs[cpu_reg].l < low) || ((int32_t)cpu_state.regs[cpu_reg].l > high))
         {
@@ -718,7 +718,7 @@ static int opBOUND_l_a32(uint32_t fetchdat)
         ILLEGAL_ON(cpu_mod == 3);
         SEG_CHECK_READ(cpu_state.ea_seg);
         low = geteal();
-        high = readmeml(easeg, cpu_state.eaaddr + 4);     if (cpu_state.abrt) return 1;
+        high = readmeml(easeg, cpu_state.eaaddr + 4);     if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
 
         if (((int32_t)cpu_state.regs[cpu_reg].l < low) || ((int32_t)cpu_state.regs[cpu_reg].l > high))
         {
@@ -849,7 +849,7 @@ static void loadall_load_segment(uint32_t addr, x86seg *s)
 	cpu_cur_status &= ~(CPU_STATUS_USE32 | CPU_STATUS_STACK32);
 	if (use32)
 	       cpu_cur_status |= CPU_STATUS_USE32;
-	if (stack32)
+	if (__builtin_expect(stack32, true))
 	       cpu_cur_status |= CPU_STATUS_STACK32;
 
 	set_segment_limit(s, segdat3);

@@ -45,7 +45,7 @@ static int opINT(uint32_t fetchdat)
                         cpl_override = 1;
                         t = readmemw(tr.base, 0x66) - 32;
                         cpl_override = 0;
-                        if (cpu_state.abrt) return 1;
+                        if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
 
                         t += (temp >> 3);
                         if (t <= tr.limit)
@@ -53,7 +53,7 @@ static int opINT(uint32_t fetchdat)
                                 cpl_override = 1;
                                 d = readmemb(tr.base, t);// + (temp >> 3));
                                 cpl_override = 0;
-                                if (cpu_state.abrt) return 1;
+                                if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
 
                                 if (!(d & (1 << (temp & 7))))
                                 {

@@ -8,14 +8,14 @@
                 {                                                                       \
                         case 0x00: /*ROL b, c*/                                         \
                         temp = (temp << (c & 7)) | (temp >> (8-(c & 7)));               \
-                        seteab(temp);      if (cpu_state.abrt) return 1;                     \
+                        seteab(temp);      if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;                     \
                         set_flags_rotate(FLAGS_ROL8, temp);                             \
                         CLOCK_CYCLES((cpu_mod == 3) ? 3 : 7);                                 \
                         PREFETCH_RUN((cpu_mod == 3) ? 3 : 7, 2, rmdat, (cpu_mod == 3) ? 0:1,0,(cpu_mod == 3) ? 0:1,0, ea32); \
                         break;                                                          \
                         case 0x08: /*ROR b,CL*/                                         \
                         temp = (temp >> (c & 7)) | (temp << (8-(c & 7)));               \
-                        seteab(temp);      if (cpu_state.abrt) return 1;                \
+                        seteab(temp);      if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;                \
                         set_flags_rotate(FLAGS_ROR8, temp);                             \
                         CLOCK_CYCLES((cpu_mod == 3) ? 3 : 7);                                 \
                         PREFETCH_RUN((cpu_mod == 3) ? 3 : 7, 2, rmdat, (cpu_mod == 3) ? 0:1,0,(cpu_mod == 3) ? 0:1,0, ea32); \
@@ -30,7 +30,7 @@
                                 temp = (temp << 1) | tempc;                             \
                                 c--;                                                    \
                         }                                                               \
-                        seteab(temp);           if (cpu_state.abrt) return 1;                     \
+                        seteab(temp);           if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;                     \
                         cpu_state.flags &= ~(C_FLAG | V_FLAG);                                    \
                         if (temp2) cpu_state.flags |= C_FLAG;                                     \
                         if ((cpu_state.flags & C_FLAG) ^ (temp >> 7)) cpu_state.flags |= V_FLAG;            \
@@ -47,7 +47,7 @@
                                 temp = (temp >> 1) | tempc;                             \
                                 c--;                                                    \
                         }                                                               \
-                        seteab(temp);           if (cpu_state.abrt) return 1;                     \
+                        seteab(temp);           if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;                     \
                         cpu_state.flags &= ~(C_FLAG | V_FLAG);                                    \
                         if (temp2) cpu_state.flags |= C_FLAG;                                     \
                         if ((temp ^ (temp >> 1)) & 0x40) cpu_state.flags |= V_FLAG;               \
@@ -55,20 +55,20 @@
                         PREFETCH_RUN((cpu_mod == 3) ? 9 : 10, 2, rmdat, (cpu_mod == 3) ? 0:1,0,(cpu_mod == 3) ? 0:1,0, ea32); \
                         break;                                                          \
                         case 0x20: case 0x30: /*SHL b,CL*/                              \
-                        seteab(temp << c);      if (cpu_state.abrt) return 1;                     \
+                        seteab(temp << c);      if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;                     \
                         set_flags_shift(FLAGS_SHL8, temp_orig, c, (temp << c) & 0xff);  \
                         CLOCK_CYCLES((cpu_mod == 3) ? 3 : 7);                                 \
                         PREFETCH_RUN((cpu_mod == 3) ? 3 : 7, 2, rmdat, (cpu_mod == 3) ? 0:1,0,(cpu_mod == 3) ? 0:1,0, ea32); \
                         break;                                                          \
                         case 0x28: /*SHR b,CL*/                                         \
-                        seteab(temp >> c);      if (cpu_state.abrt) return 1;                     \
+                        seteab(temp >> c);      if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;                     \
                         set_flags_shift(FLAGS_SHR8, temp_orig, c, temp >> c);           \
                         CLOCK_CYCLES((cpu_mod == 3) ? 3 : 7);                                 \
                         PREFETCH_RUN((cpu_mod == 3) ? 3 : 7, 2, rmdat, (cpu_mod == 3) ? 0:1,0,(cpu_mod == 3) ? 0:1,0, ea32); \
                         break;                                                          \
                         case 0x38: /*SAR b,CL*/                                         \
                         temp = (int8_t)temp >> c;                                       \
-                        seteab(temp);           if (cpu_state.abrt) return 1;                     \
+                        seteab(temp);           if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;                     \
                         set_flags_shift(FLAGS_SAR8, temp_orig, c, temp);                \
                         CLOCK_CYCLES((cpu_mod == 3) ? 3 : 7);                                 \
                         PREFETCH_RUN((cpu_mod == 3) ? 3 : 7, 2, rmdat, (cpu_mod == 3) ? 0:1,0,(cpu_mod == 3) ? 0:1,0, ea32); \
@@ -85,14 +85,14 @@
                 {                                                                       \
                         case 0x00: /*ROL w, c*/                                         \
                         temp = (temp << (c & 15)) | (temp >> (16-(c & 15)));            \
-                        seteaw(temp);      if (cpu_state.abrt) return 1;                \
+                        seteaw(temp);      if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;                \
                         set_flags_rotate(FLAGS_ROL16, temp);                            \
                         CLOCK_CYCLES((cpu_mod == 3) ? 3 : 7);                           \
                         PREFETCH_RUN((cpu_mod == 3) ? 3 : 7, 2, rmdat, (cpu_mod == 3) ? 0:1,0,(cpu_mod == 3) ? 0:1,0, ea32); \
                         break;                                                          \
                         case 0x08: /*ROR w,CL*/                                         \
                         temp = (temp >> (c & 15)) | (temp << (16-(c & 15)));            \
-                        seteaw(temp);      if (cpu_state.abrt) return 1;                \
+                        seteaw(temp);      if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;                \
                         set_flags_rotate(FLAGS_ROR16, temp);                            \
                         CLOCK_CYCLES((cpu_mod == 3) ? 3 : 7);                           \
                         PREFETCH_RUN((cpu_mod == 3) ? 3 : 7, 2, rmdat, (cpu_mod == 3) ? 0:1,0,(cpu_mod == 3) ? 0:1,0, ea32); \
@@ -107,7 +107,7 @@
                                 temp = (temp << 1) | tempc;                             \
                                 c--;                                                    \
                         }                                                               \
-                        seteaw(temp);           if (cpu_state.abrt) return 1;                     \
+                        seteaw(temp);           if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;                     \
                         cpu_state.flags &= ~(C_FLAG | V_FLAG);                                    \
                         if (temp2) cpu_state.flags |= C_FLAG;                                     \
                         if ((cpu_state.flags & C_FLAG) ^ (temp >> 15)) cpu_state.flags |= V_FLAG;           \
@@ -124,7 +124,7 @@
                                 temp = (temp >> 1) | tempc;                             \
                                 c--;                                                    \
                         }                                                               \
-                        seteaw(temp);           if (cpu_state.abrt) return 1;                     \
+                        seteaw(temp);           if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;                     \
                         cpu_state.flags &= ~(C_FLAG | V_FLAG);                                    \
                         if (temp2) cpu_state.flags |= C_FLAG;                                     \
                         if ((temp ^ (temp >> 1)) & 0x4000) cpu_state.flags |= V_FLAG;             \
@@ -132,20 +132,20 @@
                         PREFETCH_RUN((cpu_mod == 3) ? 9 : 10, 2, rmdat, (cpu_mod == 3) ? 0:1,0,(cpu_mod == 3) ? 0:1,0, ea32); \
                         break;                                                          \
                         case 0x20: case 0x30: /*SHL w, c*/                              \
-                        seteaw(temp << c);      if (cpu_state.abrt) return 1;                     \
+                        seteaw(temp << c);      if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;                     \
                         set_flags_shift(FLAGS_SHL16, temp_orig, c, (temp << c) & 0xffff); \
                         CLOCK_CYCLES((cpu_mod == 3) ? 3 : 7);                                 \
                         PREFETCH_RUN((cpu_mod == 3) ? 3 : 7, 2, rmdat, (cpu_mod == 3) ? 0:1,0,(cpu_mod == 3) ? 0:1,0, ea32); \
                         break;                                                          \
                         case 0x28: /*SHR w, c*/                                         \
-                        seteaw(temp >> c);      if (cpu_state.abrt) return 1;                     \
+                        seteaw(temp >> c);      if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;                     \
                         set_flags_shift(FLAGS_SHR16, temp_orig, c, temp >> c);          \
                         CLOCK_CYCLES((cpu_mod == 3) ? 3 : 7);                                 \
                         PREFETCH_RUN((cpu_mod == 3) ? 3 : 7, 2, rmdat, (cpu_mod == 3) ? 0:1,0,(cpu_mod == 3) ? 0:1,0, ea32); \
                         break;                                                          \
                         case 0x38: /*SAR w, c*/                                         \
                         temp = (int16_t)temp >> c;                                      \
-                        seteaw(temp);           if (cpu_state.abrt) return 1;                     \
+                        seteaw(temp);           if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;                     \
                         set_flags_shift(FLAGS_SAR16, temp_orig, c, temp);               \
                         CLOCK_CYCLES((cpu_mod == 3) ? 3 : 7);                                 \
                         PREFETCH_RUN((cpu_mod == 3) ? 3 : 7, 2, rmdat, (cpu_mod == 3) ? 0:1,0,(cpu_mod == 3) ? 0:1,0, ea32); \
@@ -162,14 +162,14 @@
                 {                                                                       \
                         case 0x00: /*ROL l, c*/                                         \
                         temp = (temp << c) | (temp >> (32-c));                          \
-                        seteal(temp);      if (cpu_state.abrt) return 1;                \
+                        seteal(temp);      if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;                \
                         set_flags_rotate(FLAGS_ROL32, temp);                            \
                         CLOCK_CYCLES((cpu_mod == 3) ? 3 : 7);                           \
                         PREFETCH_RUN((cpu_mod == 3) ? 3 : 7, 2, rmdat, (cpu_mod == 3) ? 0:1,0,(cpu_mod == 3) ? 0:1,0, ea32); \
                         break;                                                          \
                         case 0x08: /*ROR l,CL*/                                         \
                         temp = (temp >> c) | (temp << (32-c));                          \
-                        seteal(temp);      if (cpu_state.abrt) return 1;                \
+                        seteal(temp);      if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;                \
                         set_flags_rotate(FLAGS_ROR32, temp);                            \
                         CLOCK_CYCLES((cpu_mod == 3) ? 3 : 7);                           \
                         PREFETCH_RUN((cpu_mod == 3) ? 3 : 7, 2, rmdat, (cpu_mod == 3) ? 0:1,0,(cpu_mod == 3) ? 0:1,0, ea32); \
@@ -184,7 +184,7 @@
                                 temp = (temp << 1) | tempc;                             \
                                 c--;                                                    \
                         }                                                               \
-                        seteal(temp);           if (cpu_state.abrt) return 1;                     \
+                        seteal(temp);           if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;                     \
                         cpu_state.flags &= ~(C_FLAG | V_FLAG);                                    \
                         if (temp2) cpu_state.flags |= C_FLAG;                                     \
                         if ((cpu_state.flags & C_FLAG) ^ (temp >> 31)) cpu_state.flags |= V_FLAG;           \
@@ -201,7 +201,7 @@
                                 temp = (temp >> 1) | tempc;                             \
                                 c--;                                                    \
                         }                                                               \
-                        seteal(temp);           if (cpu_state.abrt) return 1;                     \
+                        seteal(temp);           if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;                     \
                         cpu_state.flags &= ~(C_FLAG | V_FLAG);                                    \
                         if (temp2) cpu_state.flags |= C_FLAG;                                     \
                         if ((temp ^ (temp >> 1)) & 0x40000000) cpu_state.flags |= V_FLAG;         \
@@ -209,20 +209,20 @@
                         PREFETCH_RUN((cpu_mod == 3) ? 9 : 10, 2, rmdat, 0,(cpu_mod == 3) ? 0:1,0,(cpu_mod == 3) ? 0:1, ea32); \
                         break;                                                          \
                         case 0x20: case 0x30: /*SHL l, c*/                              \
-                        seteal(temp << c);      if (cpu_state.abrt) return 1;                     \
+                        seteal(temp << c);      if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;                     \
                         set_flags_shift(FLAGS_SHL32, temp_orig, c, temp << c);          \
                         CLOCK_CYCLES((cpu_mod == 3) ? 3 : 7);                                 \
                         PREFETCH_RUN((cpu_mod == 3) ? 3 : 7, 2, rmdat, 0,(cpu_mod == 3) ? 0:1,0,(cpu_mod == 3) ? 0:1, ea32); \
                         break;                                                          \
                         case 0x28: /*SHR l, c*/                                         \
-                        seteal(temp >> c);      if (cpu_state.abrt) return 1;                     \
+                        seteal(temp >> c);      if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;                     \
                         set_flags_shift(FLAGS_SHR32, temp_orig, c, temp >> c);          \
                         CLOCK_CYCLES((cpu_mod == 3) ? 3 : 7);                                 \
                         PREFETCH_RUN((cpu_mod == 3) ? 3 : 7, 2, rmdat, 0,(cpu_mod == 3) ? 0:1,0,(cpu_mod == 3) ? 0:1, ea32); \
                         break;                                                          \
                         case 0x38: /*SAR l, c*/                                         \
                         temp = (int32_t)temp >> c;                                      \
-                        seteal(temp);           if (cpu_state.abrt) return 1;                     \
+                        seteal(temp);           if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;                     \
                         set_flags_shift(FLAGS_SAR32, temp_orig, c, temp);               \
                         CLOCK_CYCLES((cpu_mod == 3) ? 3 : 7);                                 \
                         PREFETCH_RUN((cpu_mod == 3) ? 3 : 7, 2, rmdat, 0,(cpu_mod == 3) ? 0:1,0,(cpu_mod == 3) ? 0:1, ea32); \
@@ -239,7 +239,7 @@
                 {                                                                       \
                         case 0x00: /*ROL b, c*/                                         \
                         temp = (temp << (c & 7)) | (temp >> (8-(c & 7)));               \
-                        seteab(temp);      if (cpu_state.abrt) return 1;                     \
+                        seteab(temp);      if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;                     \
                         cpu_state.flags &= ~(C_FLAG | V_FLAG);                          \
                         if (temp & 1) cpu_state.flags |= C_FLAG;                        \
                         if ((temp ^ (temp >> 7)) & 1) cpu_state.flags |= V_FLAG;        \
@@ -248,7 +248,7 @@
                         break;                                                          \
                         case 0x08: /*ROR b,CL*/                                         \
                         temp = (temp >> (c & 7)) | (temp << (8-(c & 7)));               \
-                        seteab(temp);      if (cpu_state.abrt) return 1;                     \
+                        seteab(temp);      if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;                     \
                         cpu_state.flags &= ~(C_FLAG | V_FLAG);                          \
                         if (temp & 0x80) cpu_state.flags |= C_FLAG;                     \
                         if ((temp ^ (temp >> 1)) & 0x40) cpu_state.flags |= V_FLAG;     \
@@ -265,7 +265,7 @@
                                 temp = (temp << 1) | tempc;                             \
                                 c--;                                                    \
                         }                                                               \
-                        seteab(temp);           if (cpu_state.abrt) return 1;                     \
+                        seteab(temp);           if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;                     \
                         cpu_state.flags &= ~(C_FLAG | V_FLAG);                                    \
                         if (temp2) cpu_state.flags |= C_FLAG;                                     \
                         if ((cpu_state.flags & C_FLAG) ^ (temp >> 7)) cpu_state.flags |= V_FLAG;            \
@@ -282,7 +282,7 @@
                                 temp = (temp >> 1) | tempc;                             \
                                 c--;                                                    \
                         }                                                               \
-                        seteab(temp);           if (cpu_state.abrt) return 1;                     \
+                        seteab(temp);           if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;                     \
                         cpu_state.flags &= ~(C_FLAG | V_FLAG);                                    \
                         if (temp2) cpu_state.flags |= C_FLAG;                                     \
                         if ((temp ^ (temp >> 1)) & 0x40) cpu_state.flags |= V_FLAG;               \
@@ -290,20 +290,20 @@
                         PREFETCH_RUN((cpu_mod == 3) ? 9 : 10, 2, rmdat, (cpu_mod == 3) ? 0:1,0,(cpu_mod == 3) ? 0:1,0, ea32); \
                         break;                                                          \
                         case 0x20: case 0x30: /*SHL b,CL*/                              \
-                        seteab(temp << c);      if (cpu_state.abrt) return 1;                     \
+                        seteab(temp << c);      if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;                     \
                         set_flags_shift(FLAGS_SHL8, temp_orig, c, (temp << c) & 0xff);  \
                         CLOCK_CYCLES((cpu_mod == 3) ? 3 : 7);                                 \
                         PREFETCH_RUN((cpu_mod == 3) ? 3 : 7, 2, rmdat, (cpu_mod == 3) ? 0:1,0,(cpu_mod == 3) ? 0:1,0, ea32); \
                         break;                                                          \
                         case 0x28: /*SHR b,CL*/                                         \
-                        seteab(temp >> c);      if (cpu_state.abrt) return 1;                     \
+                        seteab(temp >> c);      if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;                     \
                         set_flags_shift(FLAGS_SHR8, temp_orig, c, temp >> c);           \
                         CLOCK_CYCLES((cpu_mod == 3) ? 3 : 7);                                 \
                         PREFETCH_RUN((cpu_mod == 3) ? 3 : 7, 2, rmdat, (cpu_mod == 3) ? 0:1,0,(cpu_mod == 3) ? 0:1,0, ea32); \
                         break;                                                          \
                         case 0x38: /*SAR b,CL*/                                         \
                         temp = (int8_t)temp >> c;                                       \
-                        seteab(temp);           if (cpu_state.abrt) return 1;                     \
+                        seteab(temp);           if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;                     \
                         set_flags_shift(FLAGS_SAR8, temp_orig, c, temp);                \
                         CLOCK_CYCLES((cpu_mod == 3) ? 3 : 7);                                 \
                         PREFETCH_RUN((cpu_mod == 3) ? 3 : 7, 2, rmdat, (cpu_mod == 3) ? 0:1,0,(cpu_mod == 3) ? 0:1,0, ea32); \
@@ -320,7 +320,7 @@
                 {                                                                       \
                         case 0x00: /*ROL w, c*/                                         \
                         temp = (temp << (c & 15)) | (temp >> (16-(c & 15)));            \
-                        seteaw(temp);      if (cpu_state.abrt) return 1;                \
+                        seteaw(temp);      if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;                \
                         cpu_state.flags &= ~(C_FLAG | V_FLAG);                          \
                         if (temp & 1) cpu_state.flags |= C_FLAG;                        \
                         if ((temp ^ (temp >> 15)) & 1) cpu_state.flags |= V_FLAG;       \
@@ -329,7 +329,7 @@
                         break;                                                          \
                         case 0x08: /*ROR w,CL*/                                         \
                         temp = (temp >> (c & 15)) | (temp << (16-(c & 15)));            \
-                        seteaw(temp);      if (cpu_state.abrt) return 1;                \
+                        seteaw(temp);      if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;                \
                         cpu_state.flags &= ~(C_FLAG | V_FLAG);                          \
                         if (temp & 0x8000) cpu_state.flags |= C_FLAG;                   \
                         if ((temp ^ (temp >> 1)) & 0x4000) cpu_state.flags |= V_FLAG;   \
@@ -346,7 +346,7 @@
                                 temp = (temp << 1) | tempc;                             \
                                 c--;                                                    \
                         }                                                               \
-                        seteaw(temp);           if (cpu_state.abrt) return 1;                     \
+                        seteaw(temp);           if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;                     \
                         cpu_state.flags &= ~(C_FLAG | V_FLAG);                                    \
                         if (temp2) cpu_state.flags |= C_FLAG;                                     \
                         if ((cpu_state.flags & C_FLAG) ^ (temp >> 15)) cpu_state.flags |= V_FLAG;           \
@@ -363,7 +363,7 @@
                                 temp = (temp >> 1) | tempc;                             \
                                 c--;                                                    \
                         }                                                               \
-                        seteaw(temp);           if (cpu_state.abrt) return 1;                     \
+                        seteaw(temp);           if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;                     \
                         cpu_state.flags &= ~(C_FLAG | V_FLAG);                                    \
                         if (temp2) cpu_state.flags |= C_FLAG;                                     \
                         if ((temp ^ (temp >> 1)) & 0x4000) cpu_state.flags |= V_FLAG;             \
@@ -371,20 +371,20 @@
                         PREFETCH_RUN((cpu_mod == 3) ? 9 : 10, 2, rmdat, (cpu_mod == 3) ? 0:1,0,(cpu_mod == 3) ? 0:1,0, ea32); \
                         break;                                                          \
                         case 0x20: case 0x30: /*SHL w, c*/                              \
-                        seteaw(temp << c);      if (cpu_state.abrt) return 1;                     \
+                        seteaw(temp << c);      if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;                     \
                         set_flags_shift(FLAGS_SHL16, temp_orig, c, (temp << c) & 0xffff); \
                         CLOCK_CYCLES((cpu_mod == 3) ? 3 : 7);                                 \
                         PREFETCH_RUN((cpu_mod == 3) ? 3 : 7, 2, rmdat, (cpu_mod == 3) ? 0:1,0,(cpu_mod == 3) ? 0:1,0, ea32); \
                         break;                                                          \
                         case 0x28: /*SHR w, c*/                                         \
-                        seteaw(temp >> c);      if (cpu_state.abrt) return 1;                     \
+                        seteaw(temp >> c);      if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;                     \
                         set_flags_shift(FLAGS_SHR16, temp_orig, c, temp >> c);          \
                         CLOCK_CYCLES((cpu_mod == 3) ? 3 : 7);                                 \
                         PREFETCH_RUN((cpu_mod == 3) ? 3 : 7, 2, rmdat, (cpu_mod == 3) ? 0:1,0,(cpu_mod == 3) ? 0:1,0, ea32); \
                         break;                                                          \
                         case 0x38: /*SAR w, c*/                                         \
                         temp = (int16_t)temp >> c;                                      \
-                        seteaw(temp);           if (cpu_state.abrt) return 1;                     \
+                        seteaw(temp);           if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;                     \
                         set_flags_shift(FLAGS_SAR16, temp_orig, c, temp);               \
                         CLOCK_CYCLES((cpu_mod == 3) ? 3 : 7);                                 \
                         PREFETCH_RUN((cpu_mod == 3) ? 3 : 7, 2, rmdat, (cpu_mod == 3) ? 0:1,0,(cpu_mod == 3) ? 0:1,0, ea32); \
@@ -401,7 +401,7 @@
                 {                                                                       \
                         case 0x00: /*ROL l, c*/                                         \
                         temp = (temp << c) | (temp >> (32-c));                          \
-                        seteal(temp);      if (cpu_state.abrt) return 1;                \
+                        seteal(temp);      if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;                \
                         cpu_state.flags &= ~(C_FLAG | V_FLAG);                          \
                         if (temp & 1) cpu_state.flags |= C_FLAG;                        \
                         if ((temp ^ (temp >> 31)) & 1) cpu_state.flags |= V_FLAG;       \
@@ -410,7 +410,7 @@
                         break;                                                          \
                         case 0x08: /*ROR l,CL*/                                         \
                         temp = (temp >> c) | (temp << (32-c));                          \
-                        seteal(temp);      if (cpu_state.abrt) return 1;                \
+                        seteal(temp);      if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;                \
                         cpu_state.flags &= ~(C_FLAG | V_FLAG);                          \
                         if (temp & 0x80000000) cpu_state.flags |= C_FLAG;               \
                         if ((temp ^ (temp >> 1)) & 0x40000000) cpu_state.flags |= V_FLAG;       \
@@ -427,7 +427,7 @@
                                 temp = (temp << 1) | tempc;                             \
                                 c--;                                                    \
                         }                                                               \
-                        seteal(temp);           if (cpu_state.abrt) return 1;                     \
+                        seteal(temp);           if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;                     \
                         cpu_state.flags &= ~(C_FLAG | V_FLAG);                                    \
                         if (temp2) cpu_state.flags |= C_FLAG;                                     \
                         if ((cpu_state.flags & C_FLAG) ^ (temp >> 31)) cpu_state.flags |= V_FLAG;           \
@@ -444,7 +444,7 @@
                                 temp = (temp >> 1) | tempc;                             \
                                 c--;                                                    \
                         }                                                               \
-                        seteal(temp);           if (cpu_state.abrt) return 1;                     \
+                        seteal(temp);           if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;                     \
                         cpu_state.flags &= ~(C_FLAG | V_FLAG);                                    \
                         if (temp2) cpu_state.flags |= C_FLAG;                                     \
                         if ((temp ^ (temp >> 1)) & 0x40000000) cpu_state.flags |= V_FLAG;         \
@@ -452,20 +452,20 @@
                         PREFETCH_RUN((cpu_mod == 3) ? 9 : 10, 2, rmdat, 0,(cpu_mod == 3) ? 0:1,0,(cpu_mod == 3) ? 0:1, ea32); \
                         break;                                                          \
                         case 0x20: case 0x30: /*SHL l, c*/                              \
-                        seteal(temp << c);      if (cpu_state.abrt) return 1;                     \
+                        seteal(temp << c);      if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;                     \
                         set_flags_shift(FLAGS_SHL32, temp_orig, c, temp << c);          \
                         CLOCK_CYCLES((cpu_mod == 3) ? 3 : 7);                                 \
                         PREFETCH_RUN((cpu_mod == 3) ? 3 : 7, 2, rmdat, 0,(cpu_mod == 3) ? 0:1,0,(cpu_mod == 3) ? 0:1, ea32); \
                         break;                                                          \
                         case 0x28: /*SHR l, c*/                                         \
-                        seteal(temp >> c);      if (cpu_state.abrt) return 1;                     \
+                        seteal(temp >> c);      if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;                     \
                         set_flags_shift(FLAGS_SHR32, temp_orig, c, temp >> c);          \
                         CLOCK_CYCLES((cpu_mod == 3) ? 3 : 7);                                 \
                         PREFETCH_RUN((cpu_mod == 3) ? 3 : 7, 2, rmdat, 0,(cpu_mod == 3) ? 0:1,0,(cpu_mod == 3) ? 0:1, ea32); \
                         break;                                                          \
                         case 0x38: /*SAR l, c*/                                         \
                         temp = (int32_t)temp >> c;                                      \
-                        seteal(temp);           if (cpu_state.abrt) return 1;                     \
+                        seteal(temp);           if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;                     \
                         set_flags_shift(FLAGS_SAR32, temp_orig, c, temp);               \
                         CLOCK_CYCLES((cpu_mod == 3) ? 3 : 7);                                 \
                         PREFETCH_RUN((cpu_mod == 3) ? 3 : 7, 2, rmdat, 0,(cpu_mod == 3) ? 0:1,0,(cpu_mod == 3) ? 0:1, ea32); \
@@ -485,7 +485,7 @@ static int opC0_a16(uint32_t fetchdat)
                 SEG_CHECK_WRITE(cpu_state.ea_seg);
         c = readmemb(cs, cpu_state.pc) & 31; cpu_state.pc++;
         PREFETCH_PREFIX();
-        temp = geteab();                if (cpu_state.abrt) return 1;
+        temp = geteab();                if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         OP_SHIFT_b(c, 0);
         return 0;
 }
@@ -500,7 +500,7 @@ static int opC0_a32(uint32_t fetchdat)
                 SEG_CHECK_WRITE(cpu_state.ea_seg);
         c = readmemb(cs, cpu_state.pc) & 31; cpu_state.pc++;
         PREFETCH_PREFIX();
-        temp = geteab();                if (cpu_state.abrt) return 1;
+        temp = geteab();                if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         OP_SHIFT_b(c, 1);
         return 0;
 }
@@ -515,7 +515,7 @@ static int opC1_w_a16(uint32_t fetchdat)
                 SEG_CHECK_WRITE(cpu_state.ea_seg);
         c = readmemb(cs, cpu_state.pc) & 31; cpu_state.pc++;
         PREFETCH_PREFIX();
-        temp = geteaw();                if (cpu_state.abrt) return 1;
+        temp = geteaw();                if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         OP_SHIFT_w(c, 0);
         return 0;
 }
@@ -530,7 +530,7 @@ static int opC1_w_a32(uint32_t fetchdat)
                 SEG_CHECK_WRITE(cpu_state.ea_seg);
         c = readmemb(cs, cpu_state.pc) & 31; cpu_state.pc++;
         PREFETCH_PREFIX();
-        temp = geteaw();                if (cpu_state.abrt) return 1;
+        temp = geteaw();                if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         OP_SHIFT_w(c, 1);
         return 0;
 }
@@ -545,7 +545,7 @@ static int opC1_l_a16(uint32_t fetchdat)
                 SEG_CHECK_WRITE(cpu_state.ea_seg);
         c = readmemb(cs, cpu_state.pc) & 31; cpu_state.pc++;
         PREFETCH_PREFIX();
-        temp = geteal();                if (cpu_state.abrt) return 1;
+        temp = geteal();                if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         OP_SHIFT_l(c, 0);
         return 0;
 }
@@ -560,7 +560,7 @@ static int opC1_l_a32(uint32_t fetchdat)
                 SEG_CHECK_WRITE(cpu_state.ea_seg);
         c = readmemb(cs, cpu_state.pc) & 31; cpu_state.pc++;
         PREFETCH_PREFIX();
-        temp = geteal();                if (cpu_state.abrt) return 1;
+        temp = geteal();                if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         OP_SHIFT_l(c, 1);
         return 0;
 }
@@ -574,7 +574,7 @@ static int opD0_a16(uint32_t fetchdat)
         fetch_ea_16(fetchdat);
         if (cpu_mod != 3)
                 SEG_CHECK_WRITE(cpu_state.ea_seg);
-        temp = geteab();                if (cpu_state.abrt) return 1;
+        temp = geteab();                if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         OP_SHIFT_b(c, 0);
         return 0;
 }
@@ -587,7 +587,7 @@ static int opD0_a32(uint32_t fetchdat)
         fetch_ea_32(fetchdat);
         if (cpu_mod != 3)
                 SEG_CHECK_WRITE(cpu_state.ea_seg);
-        temp = geteab();                if (cpu_state.abrt) return 1;
+        temp = geteab();                if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         OP_SHIFT_b(c, 1);
         return 0;
 }
@@ -600,7 +600,7 @@ static int opD1_w_a16(uint32_t fetchdat)
         fetch_ea_16(fetchdat);
         if (cpu_mod != 3)
                 SEG_CHECK_WRITE(cpu_state.ea_seg);
-        temp = geteaw();                if (cpu_state.abrt) return 1;
+        temp = geteaw();                if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         OP_SHIFT_w(c, 0);
         return 0;
 }
@@ -613,7 +613,7 @@ static int opD1_w_a32(uint32_t fetchdat)
         fetch_ea_32(fetchdat);
         if (cpu_mod != 3)
                 SEG_CHECK_WRITE(cpu_state.ea_seg);
-        temp = geteaw();                if (cpu_state.abrt) return 1;
+        temp = geteaw();                if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         OP_SHIFT_w(c, 1);
         return 0;
 }
@@ -626,7 +626,7 @@ static int opD1_l_a16(uint32_t fetchdat)
         fetch_ea_16(fetchdat);
         if (cpu_mod != 3)
                 SEG_CHECK_WRITE(cpu_state.ea_seg);
-        temp = geteal();                if (cpu_state.abrt) return 1;
+        temp = geteal();                if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         OP_SHIFT_l(c, 0);
         return 0;
 }
@@ -639,7 +639,7 @@ static int opD1_l_a32(uint32_t fetchdat)
         fetch_ea_32(fetchdat);
         if (cpu_mod != 3)
                 SEG_CHECK_WRITE(cpu_state.ea_seg);
-        temp = geteal();                if (cpu_state.abrt) return 1;
+        temp = geteal();                if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         OP_SHIFT_l(c, 1);
         return 0;
 }
@@ -654,7 +654,7 @@ static int opD2_a16(uint32_t fetchdat)
         if (cpu_mod != 3)
                 SEG_CHECK_WRITE(cpu_state.ea_seg);
         c = CL & 31;
-        temp = geteab();                if (cpu_state.abrt) return 1;
+        temp = geteab();                if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         OP_SHIFT_b(c, 0);
         return 0;
 }
@@ -668,7 +668,7 @@ static int opD2_a32(uint32_t fetchdat)
         if (cpu_mod != 3)
                 SEG_CHECK_WRITE(cpu_state.ea_seg);
         c = CL & 31;
-        temp = geteab();                if (cpu_state.abrt) return 1;
+        temp = geteab();                if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         OP_SHIFT_b(c, 1);
         return 0;
 }
@@ -682,7 +682,7 @@ static int opD3_w_a16(uint32_t fetchdat)
         if (cpu_mod != 3)
                 SEG_CHECK_WRITE(cpu_state.ea_seg);
         c = CL & 31;
-        temp = geteaw();                if (cpu_state.abrt) return 1;
+        temp = geteaw();                if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         OP_SHIFT_w(c, 0);
         return 0;
 }
@@ -696,7 +696,7 @@ static int opD3_w_a32(uint32_t fetchdat)
         if (cpu_mod != 3)
                 SEG_CHECK_WRITE(cpu_state.ea_seg);
         c = CL & 31;
-        temp = geteaw();                if (cpu_state.abrt) return 1;
+        temp = geteaw();                if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         OP_SHIFT_w(c, 1);
         return 0;
 }
@@ -710,7 +710,7 @@ static int opD3_l_a16(uint32_t fetchdat)
         if (cpu_mod != 3)
                 SEG_CHECK_WRITE(cpu_state.ea_seg);
         c = CL & 31;
-        temp = geteal();                if (cpu_state.abrt) return 1;
+        temp = geteal();                if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         OP_SHIFT_l(c, 0);
         return 0;
 }
@@ -724,7 +724,7 @@ static int opD3_l_a32(uint32_t fetchdat)
         if (cpu_mod != 3)
                 SEG_CHECK_WRITE(cpu_state.ea_seg);
         c = CL & 31;
-        temp = geteal();                if (cpu_state.abrt) return 1;
+        temp = geteal();                if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         OP_SHIFT_l(c, 1);
         return 0;
 }
@@ -735,12 +735,12 @@ static int opD3_l_a32(uint32_t fetchdat)
         {                                                                       \
 		int tempc;							\
 		uint32_t templ;							\
-                uint16_t tempw = geteaw();      if (cpu_state.abrt) return 1;             \
+                uint16_t tempw = geteaw();      if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;             \
                 tempc = ((tempw << (count - 1)) & (1 << 15)) ? 1 : 0;       \
                 templ = (tempw << 16) | cpu_state.regs[cpu_reg].w;         \
                 if (count <= 16) tempw =  templ >> (16 - count);                \
                 else             tempw = (templ << count) >> 16;                \
-                seteaw(tempw);                  if (cpu_state.abrt) return 1;             \
+                seteaw(tempw);                  if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;             \
                 setznp16(tempw);                                                \
                 flags_rebuild();                                                \
                 if (tempc) cpu_state.flags |= C_FLAG;                                     \
@@ -750,10 +750,10 @@ static int opD3_l_a32(uint32_t fetchdat)
         if (count)                                                              \
         {                                                                       \
 		int tempc;							\
-                uint32_t templ = geteal();      if (cpu_state.abrt) return 1;             \
+                uint32_t templ = geteal();      if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;             \
                 tempc = ((templ << (count - 1)) & (1 << 31)) ? 1 : 0;       \
                 templ = (templ << count) | (cpu_state.regs[cpu_reg].l >> (32 - count)); \
-                seteal(templ);                  if (cpu_state.abrt) return 1;             \
+                seteal(templ);                  if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;             \
                 setznp32(templ);                                                \
                 flags_rebuild();                                                \
                 if (tempc) cpu_state.flags |= C_FLAG;                                     \
@@ -765,11 +765,11 @@ static int opD3_l_a32(uint32_t fetchdat)
         {                  							\
 		int tempc;                                                     \
 		uint32_t templ;							\
-                uint16_t tempw = geteaw();      if (cpu_state.abrt) return 1;             \
+                uint16_t tempw = geteaw();      if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;             \
                 tempc = (tempw >> (count - 1)) & 1;                         \
                 templ = tempw | (cpu_state.regs[cpu_reg].w << 16);         \
                 tempw = templ >> count;                                         \
-                seteaw(tempw);                  if (cpu_state.abrt) return 1;             \
+                seteaw(tempw);                  if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;             \
                 setznp16(tempw);                                                \
                 flags_rebuild();                                                \
                 if (tempc) cpu_state.flags |= C_FLAG;                                     \
@@ -779,10 +779,10 @@ static int opD3_l_a32(uint32_t fetchdat)
         if (count)                                                              \
         {                                                                       \
 		int tempc;							\
-                uint32_t templ = geteal();      if (cpu_state.abrt) return 1;             \
+                uint32_t templ = geteal();      if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;             \
                 tempc = (templ >> (count - 1)) & 1;                         \
                 templ = (templ >> count) | (cpu_state.regs[cpu_reg].l << (32 - count)); \
-                seteal(templ);                  if (cpu_state.abrt) return 1;             \
+                seteal(templ);                  if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;             \
                 setznp32(templ);                                                \
                 flags_rebuild();                                                \
                 if (tempc) cpu_state.flags |= C_FLAG;                                     \

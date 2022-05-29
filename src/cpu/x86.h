@@ -1,3 +1,6 @@
+#ifndef X86_H
+#define X86_H 1
+
 #define ABRT_MASK 0x7f
 /*An 'expected' exception is one that would be expected to occur on every execution
   of this code path; eg a GPF due to being in v86 mode. An 'unexpected' exception is
@@ -63,7 +66,7 @@ extern uint32_t *eal_r, *eal_w;
 #define OPTYPE_INT 4
 
 
-enum
+enum cpu_abort_state_t
 {
         ABRT_NONE = 0,
         ABRT_GEN,
@@ -80,3 +83,5 @@ extern void	x86illegal();
 extern void	x86seg_reset();
 extern void	x86gpf(char *s, uint16_t error);
 extern void	x86gpf_expected(char *s, uint16_t error);
+
+#endif

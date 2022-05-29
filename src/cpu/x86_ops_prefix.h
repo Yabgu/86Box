@@ -2,7 +2,7 @@
 static int op ## name ## _w_a16(uint32_t fetchdat)              \
 {                                                               \
         fetchdat = fastreadl(cs + cpu_state.pc);                \
-        if (cpu_state.abrt) return 1;                                     \
+        if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;                                     \
         cpu_state.pc++;                                         \
                                                                 \
         cpu_state.ea_seg = &seg;                                          \
@@ -18,7 +18,7 @@ static int op ## name ## _w_a16(uint32_t fetchdat)              \
 static int op ## name ## _l_a16(uint32_t fetchdat)              \
 {                                                               \
         fetchdat = fastreadl(cs + cpu_state.pc);                \
-        if (cpu_state.abrt) return 1;                                     \
+        if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;                                     \
         cpu_state.pc++;                                         \
                                                                 \
         cpu_state.ea_seg = &seg;                                          \
@@ -34,7 +34,7 @@ static int op ## name ## _l_a16(uint32_t fetchdat)              \
 static int op ## name ## _w_a32(uint32_t fetchdat)              \
 {                                                               \
         fetchdat = fastreadl(cs + cpu_state.pc);                \
-        if (cpu_state.abrt) return 1;                                     \
+        if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;                                     \
         cpu_state.pc++;                                         \
                                                                 \
         cpu_state.ea_seg = &seg;                                          \
@@ -50,7 +50,7 @@ static int op ## name ## _w_a32(uint32_t fetchdat)              \
 static int op ## name ## _l_a32(uint32_t fetchdat)              \
 {                                                               \
         fetchdat = fastreadl(cs + cpu_state.pc);                \
-        if (cpu_state.abrt) return 1;                                     \
+        if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;                                     \
         cpu_state.pc++;                                         \
                                                                 \
         cpu_state.ea_seg = &seg;                                          \
@@ -87,7 +87,7 @@ op_seg(SS_REPNE, cpu_state.seg_ss, x86_opcodes_REPNE, x86_opcodes)
 static int op_66(uint32_t fetchdat) /*Data size select*/
 {
         fetchdat = fastreadl(cs + cpu_state.pc);
-        if (cpu_state.abrt) return 1;
+        if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         cpu_state.pc++;
 
         cpu_state.op32 = ((use32 & 0x100) ^ 0x100) | (cpu_state.op32 & 0x200);
@@ -98,7 +98,7 @@ static int op_66(uint32_t fetchdat) /*Data size select*/
 static int op_67(uint32_t fetchdat) /*Address size select*/
 {
         fetchdat = fastreadl(cs + cpu_state.pc);
-        if (cpu_state.abrt) return 1;
+        if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         cpu_state.pc++;
 
         cpu_state.op32 = ((use32 & 0x200) ^ 0x200) | (cpu_state.op32 & 0x100);
@@ -110,7 +110,7 @@ static int op_67(uint32_t fetchdat) /*Address size select*/
 static int op_66_REPE(uint32_t fetchdat) /*Data size select*/
 {
         fetchdat = fastreadl(cs + cpu_state.pc);
-        if (cpu_state.abrt) return 1;
+        if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         cpu_state.pc++;
 
         cpu_state.op32 = ((use32 & 0x100) ^ 0x100) | (cpu_state.op32 & 0x200);
@@ -123,7 +123,7 @@ static int op_66_REPE(uint32_t fetchdat) /*Data size select*/
 static int op_67_REPE(uint32_t fetchdat) /*Address size select*/
 {
         fetchdat = fastreadl(cs + cpu_state.pc);
-        if (cpu_state.abrt) return 1;
+        if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         cpu_state.pc++;
 
         cpu_state.op32 = ((use32 & 0x200) ^ 0x200) | (cpu_state.op32 & 0x100);
@@ -136,7 +136,7 @@ static int op_67_REPE(uint32_t fetchdat) /*Address size select*/
 static int op_66_REPNE(uint32_t fetchdat) /*Data size select*/
 {
         fetchdat = fastreadl(cs + cpu_state.pc);
-        if (cpu_state.abrt) return 1;
+        if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         cpu_state.pc++;
 
         cpu_state.op32 = ((use32 & 0x100) ^ 0x100) | (cpu_state.op32 & 0x200);
@@ -149,7 +149,7 @@ static int op_66_REPNE(uint32_t fetchdat) /*Data size select*/
 static int op_67_REPNE(uint32_t fetchdat) /*Address size select*/
 {
         fetchdat = fastreadl(cs + cpu_state.pc);
-        if (cpu_state.abrt) return 1;
+        if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         cpu_state.pc++;
 
         cpu_state.op32 = ((use32 & 0x200) ^ 0x200) | (cpu_state.op32 & 0x100);

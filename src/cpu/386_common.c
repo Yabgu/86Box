@@ -1,4 +1,5 @@
 #include <stdarg.h>
+#include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
@@ -40,7 +41,7 @@ uint32_t cr2, cr3, cr4;
 uint32_t dr[8];
 
 uint32_t use32;
-int stack32;
+bool stack32;
 
 uint32_t *eal_r, *eal_w;
 
@@ -326,17 +327,14 @@ x386_common_log(const char *fmt, ...)
 
 
 static __inline void
-set_stack32(int s)
+set_stack32(bool s)
 {
-    if ((cr0 & 1) && ! (cpu_state.eflags & VM_FLAG))
-	stack32 = s;
-    else
-	stack32 = 0;
+    stack32 = (cr0 & 1) && ! (cpu_state.eflags & VM_FLAG) && s;
 
-    if (stack32)
-	cpu_cur_status |= CPU_STATUS_STACK32;
+    if (__builtin_expect(stack32, true))
+	    cpu_cur_status |= CPU_STATUS_STACK32;
     else
-	cpu_cur_status &= ~CPU_STATUS_STACK32;
+	    cpu_cur_status &= ~CPU_STATUS_STACK32;
 }
 
 
@@ -1323,7 +1321,7 @@ x86_int(int num)
 
 	if ((num << 2UL) + 3UL > idt.limit) {
 		if (idt.limit < 35) {
-			cpu_state.abrt = 0;
+			cpu_state.abrt = ABRT_NONE;
 			softresetx86();
 			cpu_set_edx();
 #ifdef ENABLE_386_COMMON_LOG
@@ -1332,7 +1330,7 @@ x86_int(int num)
 		} else
 			x86_int(8);
 	} else {
-		if (stack32) {
+		if (__builtin_expect(stack32, true)) {
 			writememw(ss, ESP - 2, cpu_state.flags);
 			writememw(ss, ESP - 4, CS);
 			writememw(ss, ESP - 6, cpu_state.pc);
@@ -1375,7 +1373,7 @@ x86_int_sw(int num)
 	if ((num << 2UL) + 3UL > idt.limit)
 		x86_int(0x0d);
 	else {
-		if (stack32) {
+		if (__builtin_expect(stack32, true)) {
 			writememw(ss, ESP - 2, cpu_state.flags);
 			writememw(ss, ESP - 4, CS);
 			writememw(ss, ESP - 6, cpu_state.pc);
@@ -1416,18 +1414,18 @@ x86_int_sw_rm(int num)
     new_pc = readmemw(0, addr);
     new_cs = readmemw(0, addr + 2);
 
-    if (cpu_state.abrt)
+    if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false))
 	return 1;
 
     writememw(ss, ((SP - 2) & 0xFFFF), cpu_state.flags);
 
-    if (cpu_state.abrt)
+    if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false))
 	return 1;
 
     writememw(ss, ((SP - 4) & 0xFFFF), CS);
     writememw(ss, ((SP - 6) & 0xFFFF), cpu_state.pc);
 
-    if (cpu_state.abrt)
+    if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false))
 	return 1;
 
     SP -= 6;
@@ -1465,7 +1463,7 @@ checkio(uint32_t port)
     t = readmemw(tr.base, 0x66);
     cpl_override = 0;
 
-    if (cpu_state.abrt)
+    if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false))
 	return 0;
 
     if ((t + (port >> 3UL)) > tr.limit)

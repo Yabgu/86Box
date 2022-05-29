@@ -114,7 +114,7 @@ static int opMOV_SP_imm(uint32_t fetchdat)
 
 static int opMOV_EAX_imm(uint32_t fetchdat)
 {
-        uint32_t templ = getlong();     if (cpu_state.abrt) return 1;
+        uint32_t templ = getlong();     if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         EAX = templ;
         CLOCK_CYCLES(timing_rr);
         PREFETCH_RUN(timing_rr, 5, -1, 0,0,0,0, 0);
@@ -122,7 +122,7 @@ static int opMOV_EAX_imm(uint32_t fetchdat)
 }
 static int opMOV_EBX_imm(uint32_t fetchdat)
 {
-        uint32_t templ = getlong();     if (cpu_state.abrt) return 1;
+        uint32_t templ = getlong();     if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         EBX = templ;
         CLOCK_CYCLES(timing_rr);
         PREFETCH_RUN(timing_rr, 5, -1, 0,0,0,0, 0);
@@ -130,7 +130,7 @@ static int opMOV_EBX_imm(uint32_t fetchdat)
 }
 static int opMOV_ECX_imm(uint32_t fetchdat)
 {
-        uint32_t templ = getlong();     if (cpu_state.abrt) return 1;
+        uint32_t templ = getlong();     if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         ECX = templ;
         CLOCK_CYCLES(timing_rr);
         PREFETCH_RUN(timing_rr, 5, -1, 0,0,0,0, 0);
@@ -138,7 +138,7 @@ static int opMOV_ECX_imm(uint32_t fetchdat)
 }
 static int opMOV_EDX_imm(uint32_t fetchdat)
 {
-        uint32_t templ = getlong();     if (cpu_state.abrt) return 1;
+        uint32_t templ = getlong();     if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         EDX = templ;
         CLOCK_CYCLES(timing_rr);
         PREFETCH_RUN(timing_rr, 5, -1, 0,0,0,0, 0);
@@ -146,7 +146,7 @@ static int opMOV_EDX_imm(uint32_t fetchdat)
 }
 static int opMOV_ESI_imm(uint32_t fetchdat)
 {
-        uint32_t templ = getlong();     if (cpu_state.abrt) return 1;
+        uint32_t templ = getlong();     if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         ESI = templ;
         CLOCK_CYCLES(timing_rr);
         PREFETCH_RUN(timing_rr, 5, -1, 0,0,0,0, 0);
@@ -154,7 +154,7 @@ static int opMOV_ESI_imm(uint32_t fetchdat)
 }
 static int opMOV_EDI_imm(uint32_t fetchdat)
 {
-        uint32_t templ = getlong();     if (cpu_state.abrt) return 1;
+        uint32_t templ = getlong();     if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         EDI = templ;
         CLOCK_CYCLES(timing_rr);
         PREFETCH_RUN(timing_rr, 5, -1, 0,0,0,0, 0);
@@ -162,7 +162,7 @@ static int opMOV_EDI_imm(uint32_t fetchdat)
 }
 static int opMOV_EBP_imm(uint32_t fetchdat)
 {
-        uint32_t templ = getlong();     if (cpu_state.abrt) return 1;
+        uint32_t templ = getlong();     if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         EBP = templ;
         CLOCK_CYCLES(timing_rr);
         PREFETCH_RUN(timing_rr, 5, -1, 0,0,0,0, 0);
@@ -170,7 +170,7 @@ static int opMOV_EBP_imm(uint32_t fetchdat)
 }
 static int opMOV_ESP_imm(uint32_t fetchdat)
 {
-        uint32_t templ = getlong();     if (cpu_state.abrt) return 1;
+        uint32_t templ = getlong();     if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         ESP = templ;
         CLOCK_CYCLES(timing_rr);
         PREFETCH_RUN(timing_rr, 5, -1, 0,0,0,0, 0);
@@ -183,7 +183,7 @@ static int opMOV_b_imm_a16(uint32_t fetchdat)
         fetch_ea_16(fetchdat);
         ILLEGAL_ON((rmdat & 0x38) != 0);
         SEG_CHECK_WRITE(cpu_state.ea_seg);
-        temp = readmemb(cs,cpu_state.pc); cpu_state.pc++;               if (cpu_state.abrt) return 1;
+        temp = readmemb(cs,cpu_state.pc); cpu_state.pc++;               if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         seteab(temp);
         CLOCK_CYCLES(timing_rr);
         PREFETCH_RUN(timing_rr, 3, rmdat, 0,0,(cpu_mod == 3) ? 1:0,0, 0);
@@ -195,7 +195,7 @@ static int opMOV_b_imm_a32(uint32_t fetchdat)
         fetch_ea_32(fetchdat);
         ILLEGAL_ON((rmdat & 0x38) != 0);
         SEG_CHECK_WRITE(cpu_state.ea_seg);
-        temp = getbyte();               if (cpu_state.abrt) return 1;
+        temp = getbyte();               if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         seteab(temp);
         CLOCK_CYCLES(timing_rr);
         PREFETCH_RUN(timing_rr, 3, rmdat, 0,0,(cpu_mod == 3) ? 1:0,0, 1);
@@ -208,7 +208,7 @@ static int opMOV_w_imm_a16(uint32_t fetchdat)
         fetch_ea_16(fetchdat);
         ILLEGAL_ON((rmdat & 0x38) != 0);
         SEG_CHECK_WRITE(cpu_state.ea_seg);
-        temp = getword();               if (cpu_state.abrt) return 1;
+        temp = getword();               if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         seteaw(temp);
         CLOCK_CYCLES(timing_rr);
         PREFETCH_RUN(timing_rr, 4, rmdat, 0,0,(cpu_mod == 3) ? 1:0,0, 0);
@@ -220,7 +220,7 @@ static int opMOV_w_imm_a32(uint32_t fetchdat)
         fetch_ea_32(fetchdat);
         ILLEGAL_ON((rmdat & 0x38) != 0);
         SEG_CHECK_WRITE(cpu_state.ea_seg);
-        temp = getword();               if (cpu_state.abrt) return 1;
+        temp = getword();               if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         seteaw(temp);
         CLOCK_CYCLES(timing_rr);
         PREFETCH_RUN(timing_rr, 4, rmdat, 0,0,(cpu_mod == 3) ? 1:0,0, 1);
@@ -232,7 +232,7 @@ static int opMOV_l_imm_a16(uint32_t fetchdat)
         fetch_ea_16(fetchdat);
         ILLEGAL_ON((rmdat & 0x38) != 0);
         SEG_CHECK_WRITE(cpu_state.ea_seg);
-        temp = getlong();               if (cpu_state.abrt) return 1;
+        temp = getlong();               if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         seteal(temp);
         CLOCK_CYCLES(timing_rr);
         PREFETCH_RUN(timing_rr, 6, rmdat, 0,0,0,(cpu_mod == 3) ? 1:0, 0);
@@ -244,7 +244,7 @@ static int opMOV_l_imm_a32(uint32_t fetchdat)
         fetch_ea_32(fetchdat);
         ILLEGAL_ON((rmdat & 0x38) != 0);
         SEG_CHECK_WRITE(cpu_state.ea_seg);
-        temp = getlong();               if (cpu_state.abrt) return 1;
+        temp = getlong();               if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         seteal(temp);
         CLOCK_CYCLES(timing_rr);
         PREFETCH_RUN(timing_rr, 6, rmdat, 0,0,0,(cpu_mod == 3) ? 1:0, 1);
@@ -258,7 +258,7 @@ static int opMOV_AL_a16(uint32_t fetchdat)
         uint16_t addr = getwordf();
         SEG_CHECK_READ(cpu_state.ea_seg);
         CHECK_READ(cpu_state.ea_seg, addr, addr);
-        temp = readmemb(cpu_state.ea_seg->base, addr);      if (cpu_state.abrt) return 1;
+        temp = readmemb(cpu_state.ea_seg->base, addr);      if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         AL = temp;
         CLOCK_CYCLES((is486) ? 1 : 4);
         PREFETCH_RUN(4, 3, -1, 1,0,0,0, 0);
@@ -270,7 +270,7 @@ static int opMOV_AL_a32(uint32_t fetchdat)
         uint32_t addr = getlong();
         SEG_CHECK_READ(cpu_state.ea_seg);
         CHECK_READ(cpu_state.ea_seg, addr, addr);
-        temp = readmemb(cpu_state.ea_seg->base, addr);      if (cpu_state.abrt) return 1;
+        temp = readmemb(cpu_state.ea_seg->base, addr);      if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         AL = temp;
         CLOCK_CYCLES((is486) ? 1 : 4);
         PREFETCH_RUN(4, 5, -1, 1,0,0,0, 1);
@@ -282,7 +282,7 @@ static int opMOV_AX_a16(uint32_t fetchdat)
         uint16_t addr = getwordf();
         SEG_CHECK_READ(cpu_state.ea_seg);
         CHECK_READ(cpu_state.ea_seg, addr, addr + 1UL);
-        temp = readmemw(cpu_state.ea_seg->base, addr);     if (cpu_state.abrt) return 1;
+        temp = readmemw(cpu_state.ea_seg->base, addr);     if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         AX = temp;
         CLOCK_CYCLES((is486) ? 1 : 4);
         PREFETCH_RUN(4, 3, -1, 1,0,0,0, 0);
@@ -294,7 +294,7 @@ static int opMOV_AX_a32(uint32_t fetchdat)
         uint32_t addr = getlong();
         SEG_CHECK_READ(cpu_state.ea_seg);
         CHECK_READ(cpu_state.ea_seg, addr, addr+1);
-        temp = readmemw(cpu_state.ea_seg->base, addr);     if (cpu_state.abrt) return 1;
+        temp = readmemw(cpu_state.ea_seg->base, addr);     if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         AX = temp;
         CLOCK_CYCLES((is486) ? 1 : 4);
         PREFETCH_RUN(4, 5, -1, 1,0,0,0, 1);
@@ -306,7 +306,7 @@ static int opMOV_EAX_a16(uint32_t fetchdat)
         uint16_t addr = getwordf();
         SEG_CHECK_READ(cpu_state.ea_seg);
         CHECK_READ(cpu_state.ea_seg, addr, addr + 3UL);
-        temp = readmeml(cpu_state.ea_seg->base, addr);     if (cpu_state.abrt) return 1;
+        temp = readmeml(cpu_state.ea_seg->base, addr);     if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         EAX = temp;
         CLOCK_CYCLES((is486) ? 1 : 4);
         PREFETCH_RUN(4, 3, -1, 0,1,0,0, 0);
@@ -318,7 +318,7 @@ static int opMOV_EAX_a32(uint32_t fetchdat)
         uint32_t addr = getlong();
         SEG_CHECK_READ(cpu_state.ea_seg);
         CHECK_READ(cpu_state.ea_seg, addr, addr+3);
-        temp = readmeml(cpu_state.ea_seg->base, addr);     if (cpu_state.abrt) return 1;
+        temp = readmeml(cpu_state.ea_seg->base, addr);     if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         EAX = temp;
         CLOCK_CYCLES((is486) ? 1 : 4);
         PREFETCH_RUN(4, 5, -1, 0,1,0,0, 1);
@@ -357,7 +357,7 @@ static int opMOV_a16_AX(uint32_t fetchdat)
 }
 static int opMOV_a32_AX(uint32_t fetchdat)
 {
-        uint32_t addr = getlong();             if (cpu_state.abrt) return 1;
+        uint32_t addr = getlong();             if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         SEG_CHECK_WRITE(cpu_state.ea_seg);
         CHECK_WRITE_COMMON(cpu_state.ea_seg, addr, addr + 1);
         writememw(cpu_state.ea_seg->base, addr, AX);
@@ -377,7 +377,7 @@ static int opMOV_a16_EAX(uint32_t fetchdat)
 }
 static int opMOV_a32_EAX(uint32_t fetchdat)
 {
-        uint32_t addr = getlong();             if (cpu_state.abrt) return 1;
+        uint32_t addr = getlong();             if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         SEG_CHECK_WRITE(cpu_state.ea_seg);
         CHECK_WRITE_COMMON(cpu_state.ea_seg, addr, addr + 3);
         writememl(cpu_state.ea_seg->base, addr, EAX);
@@ -433,7 +433,7 @@ static int opXLAT_a16(uint32_t fetchdat)
         uint8_t temp;
 
         SEG_CHECK_READ(cpu_state.ea_seg);
-        temp = readmemb(cpu_state.ea_seg->base, addr); if (cpu_state.abrt) return 1;
+        temp = readmemb(cpu_state.ea_seg->base, addr); if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         AL = temp;
         CLOCK_CYCLES(5);
         PREFETCH_RUN(5, 1, -1, 1,0,0,0, 0);
@@ -445,7 +445,7 @@ static int opXLAT_a32(uint32_t fetchdat)
         uint8_t temp;
 
         SEG_CHECK_READ(cpu_state.ea_seg);
-        temp = readmemb(cpu_state.ea_seg->base, addr); if (cpu_state.abrt) return 1;
+        temp = readmemb(cpu_state.ea_seg->base, addr); if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         AL = temp;
         CLOCK_CYCLES(5);
         PREFETCH_RUN(5, 1, -1, 1,0,0,0, 1);
@@ -575,7 +575,7 @@ static int opMOV_r_b_a16(uint32_t fetchdat)
                 uint8_t temp;
                 SEG_CHECK_READ(cpu_state.ea_seg);
                 CHECK_READ(cpu_state.ea_seg, cpu_state.eaaddr, cpu_state.eaaddr);
-                temp = geteab();                if (cpu_state.abrt) return 1;
+                temp = geteab();                if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
                 setr8(cpu_reg, temp);
                 CLOCK_CYCLES(is486 ? 1 : 4);
                 PREFETCH_RUN(4, 2, rmdat, 1,0,0,0, 0);
@@ -596,7 +596,7 @@ static int opMOV_r_b_a32(uint32_t fetchdat)
                 uint8_t temp;
                 SEG_CHECK_READ(cpu_state.ea_seg);
                 CHECK_READ(cpu_state.ea_seg, cpu_state.eaaddr, cpu_state.eaaddr);
-                temp = geteab();                if (cpu_state.abrt) return 1;
+                temp = geteab();                if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
                 setr8(cpu_reg, temp);
                 CLOCK_CYCLES(is486 ? 1 : 4);
                 PREFETCH_RUN(4, 2, rmdat, 1,0,0,0, 1);
@@ -617,7 +617,7 @@ static int opMOV_r_w_a16(uint32_t fetchdat)
                 uint16_t temp;
                 SEG_CHECK_READ(cpu_state.ea_seg);
                 CHECK_READ(cpu_state.ea_seg, cpu_state.eaaddr, cpu_state.eaaddr+1);
-                temp = geteaw();                if (cpu_state.abrt) return 1;
+                temp = geteaw();                if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
                 cpu_state.regs[cpu_reg].w = temp;
                 CLOCK_CYCLES((is486) ? 1 : 4);
                 PREFETCH_RUN(4, 2, rmdat, 1,0,0,0, 0);
@@ -638,7 +638,7 @@ static int opMOV_r_w_a32(uint32_t fetchdat)
                 uint16_t temp;
                 SEG_CHECK_READ(cpu_state.ea_seg);
                 CHECK_READ(cpu_state.ea_seg, cpu_state.eaaddr, cpu_state.eaaddr+1);
-                temp = geteaw();                if (cpu_state.abrt) return 1;
+                temp = geteaw();                if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
                 cpu_state.regs[cpu_reg].w = temp;
                 CLOCK_CYCLES((is486) ? 1 : 4);
                 PREFETCH_RUN(4, 2, rmdat, 1,0,0,0, 1);
@@ -659,7 +659,7 @@ static int opMOV_r_l_a16(uint32_t fetchdat)
                 uint32_t temp;
                 SEG_CHECK_READ(cpu_state.ea_seg);
                 CHECK_READ(cpu_state.ea_seg, cpu_state.eaaddr, cpu_state.eaaddr+3);
-                temp = geteal();                if (cpu_state.abrt) return 1;
+                temp = geteal();                if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
                 cpu_state.regs[cpu_reg].l = temp;
                 CLOCK_CYCLES(is486 ? 1 : 4);
                 PREFETCH_RUN(4, 2, rmdat, 0,1,0,0, 0);
@@ -680,7 +680,7 @@ static int opMOV_r_l_a32(uint32_t fetchdat)
                 uint32_t temp;
                 SEG_CHECK_READ(cpu_state.ea_seg);
                 CHECK_READ(cpu_state.ea_seg, cpu_state.eaaddr, cpu_state.eaaddr+3);
-                temp = geteal();                if (cpu_state.abrt) return 1;
+                temp = geteal();                if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
                 cpu_state.regs[cpu_reg].l = temp;
                 CLOCK_CYCLES(is486 ? 1 : 4);
                 PREFETCH_RUN(4, 2, rmdat, 0,1,0,0, 1);
@@ -701,7 +701,7 @@ static int opMOV_r_l_a32(uint32_t fetchdat)
                                 uint16_t temp;                                          \
                                 SEG_CHECK_READ(cpu_state.ea_seg);                       \
                                 CHECK_READ(cpu_state.ea_seg, cpu_state.eaaddr, cpu_state.eaaddr+1);                   \
-                                temp = geteaw();                if (cpu_state.abrt) return 1;     \
+                                temp = geteaw();                if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;     \
                                 cpu_state.regs[cpu_reg].w = temp;                           \
                         }                                                               \
                 }                                                                       \
@@ -720,7 +720,7 @@ static int opMOV_r_l_a32(uint32_t fetchdat)
                                 uint16_t temp;                                          \
                                 SEG_CHECK_READ(cpu_state.ea_seg);                       \
                                 CHECK_READ(cpu_state.ea_seg, cpu_state.eaaddr, cpu_state.eaaddr+1);                   \
-                                temp = geteaw();                if (cpu_state.abrt) return 1;     \
+                                temp = geteaw();                if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;     \
                                 cpu_state.regs[cpu_reg].w = temp;                           \
                         }                                                               \
                 }                                                                       \
@@ -739,7 +739,7 @@ static int opMOV_r_l_a32(uint32_t fetchdat)
                                 uint32_t temp;                                          \
                                 SEG_CHECK_READ(cpu_state.ea_seg);                       \
                                 CHECK_READ(cpu_state.ea_seg, cpu_state.eaaddr, cpu_state.eaaddr+3);                   \
-                                temp = geteal();                if (cpu_state.abrt) return 1;     \
+                                temp = geteal();                if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;     \
                                 cpu_state.regs[cpu_reg].l = temp;                           \
                         }                                                               \
                 }                                                                       \
@@ -758,7 +758,7 @@ static int opMOV_r_l_a32(uint32_t fetchdat)
                                 uint32_t temp;                                          \
                                 CHECK_READ(cpu_state.ea_seg, cpu_state.eaaddr, cpu_state.eaaddr+3);                   \
                                 SEG_CHECK_READ(cpu_state.ea_seg);                       \
-                                temp = geteal();                if (cpu_state.abrt) return 1;     \
+                                temp = geteal();                if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;     \
                                 cpu_state.regs[cpu_reg].l = temp;                           \
                         }                                                               \
                 }                                                                       \

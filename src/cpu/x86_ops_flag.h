@@ -173,7 +173,7 @@ static int opPOPF_286(uint32_t fetchdat)
                 return 1;
         }
 
-        tempw = POP_W();                if (cpu_state.abrt) return 1;
+        tempw = POP_W();                if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
 
         if (!(msw & 1))           cpu_state.flags = (cpu_state.flags & 0x7000) | (tempw & 0x0fd5) | 2;
         else if (!(CPL))          cpu_state.flags = (tempw & 0x7fd5) | 2;
@@ -201,7 +201,7 @@ static int opPOPF(uint32_t fetchdat)
                         uint32_t old_esp = ESP;
 
                         tempw = POP_W();
-                        if (cpu_state.abrt)
+                        if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false))
                         {
 
                                 ESP = old_esp;
@@ -229,7 +229,7 @@ static int opPOPF(uint32_t fetchdat)
         else
         {
                 tempw = POP_W();
-                if (cpu_state.abrt)
+                if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false))
                         return 1;
 
                 if (!(CPL) || !(msw & 1))
@@ -260,7 +260,7 @@ static int opPOPFD(uint32_t fetchdat)
                 return 1;
         }
 
-        templ = POP_L();                if (cpu_state.abrt) return 1;
+        templ = POP_L();                if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
 
         if (!(CPL) || !(msw & 1)) cpu_state.flags = (templ & 0x7fd5) | 2;
         else if (IOPLp)           cpu_state.flags = (cpu_state.flags & 0x3000) | (templ & 0x4fd5) | 2;

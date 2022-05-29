@@ -168,21 +168,21 @@ exec386(int cycs)
 		if (cpu_end_block_after_ins)
 			cpu_end_block_after_ins--;
 
-		if (cpu_state.abrt) {
+		if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) {
 			flags_rebuild();
 			tempi = cpu_state.abrt & ABRT_MASK;
-			cpu_state.abrt = 0;
+			cpu_state.abrt = ABRT_NONE;
 			x86_doabrt(tempi);
-			if (cpu_state.abrt) {
-				cpu_state.abrt = 0;
+			if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) {
+				cpu_state.abrt = ABRT_NONE;
 #ifndef USE_NEW_DYNAREC
 				CS = oldcs;
 #endif
 				cpu_state.pc = cpu_state.oldpc;
 				x386_log("Double fault\n");
 				pmodeint(8, 0);
-				if (cpu_state.abrt) {
-					cpu_state.abrt = 0;
+				if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) {
+					cpu_state.abrt = ABRT_NONE;
 					softresetx86();
 					cpu_set_edx();
 #ifdef ENABLE_386_LOG

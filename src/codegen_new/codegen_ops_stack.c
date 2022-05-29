@@ -39,7 +39,7 @@ uint32_t ropPOP_r16(codeblock_t *block, ir_data_t *ir, uint8_t opcode, uint32_t 
 {
         uop_MOV_IMM(ir, IREG_oldpc, cpu_state.oldpc);
 
-        if (stack32)
+        if (__builtin_expect(stack32, true))
                 uop_MEM_LOAD_REG(ir, IREG_16(opcode & 7), IREG_SS_base, IREG_ESP);
         else
         {
@@ -55,7 +55,7 @@ uint32_t ropPOP_r32(codeblock_t *block, ir_data_t *ir, uint8_t opcode, uint32_t 
 {
         uop_MOV_IMM(ir, IREG_oldpc, cpu_state.oldpc);
 
-        if (stack32)
+        if (__builtin_expect(stack32, true))
                 uop_MEM_LOAD_REG(ir, IREG_32(opcode & 7), IREG_SS_base, IREG_ESP);
         else
         {
@@ -129,7 +129,7 @@ uint32_t ropPOP_W(codeblock_t *block, ir_data_t *ir, uint8_t opcode, uint32_t fe
         codegen_mark_code_present(block, cs+op_pc, 1);
         if ((fetchdat & 0xc0) == 0xc0)
         {
-                if (stack32)
+                if (__builtin_expect(stack32, true))
                         uop_MEM_LOAD_REG(ir, IREG_16(fetchdat & 7), IREG_SS_base, IREG_ESP);
                 else
                 {
@@ -142,7 +142,7 @@ uint32_t ropPOP_W(codeblock_t *block, ir_data_t *ir, uint8_t opcode, uint32_t fe
                 x86seg *target_seg = codegen_generate_ea(ir, op_ea_seg, fetchdat, op_ssegs, &op_pc, op_32, 2);
                 codegen_check_seg_write(block, ir, target_seg);
 
-                if (stack32)
+                if (__builtin_expect(stack32, true))
                         uop_MEM_LOAD_REG(ir, IREG_temp0_W, IREG_SS_base, IREG_ESP);
                 else
                 {
@@ -165,7 +165,7 @@ uint32_t ropPOP_L(codeblock_t *block, ir_data_t *ir, uint8_t opcode, uint32_t fe
         codegen_mark_code_present(block, cs+op_pc, 1);
         if ((fetchdat & 0xc0) == 0xc0)
         {
-                if (stack32)
+                if (__builtin_expect(stack32, true))
                         uop_MEM_LOAD_REG(ir, IREG_32(fetchdat & 7), IREG_SS_base, IREG_ESP);
                 else
                 {
@@ -178,7 +178,7 @@ uint32_t ropPOP_L(codeblock_t *block, ir_data_t *ir, uint8_t opcode, uint32_t fe
                 x86seg *target_seg = codegen_generate_ea(ir, op_ea_seg, fetchdat, op_ssegs, &op_pc, op_32, 4);
                 codegen_check_seg_write(block, ir, target_seg);
 
-                if (stack32)
+                if (__builtin_expect(stack32, true))
                         uop_MEM_LOAD_REG(ir, IREG_temp0, IREG_SS_base, IREG_ESP);
                 else
                 {
@@ -225,7 +225,7 @@ uint32_t ropPOP_ ## seg ## _16(codeblock_t *block, ir_data_t *ir, uint8_t opcode
 {                                                                                                                                       \
         uop_MOV_IMM(ir, IREG_oldpc, cpu_state.oldpc);                                                                                   \
                                                                                                                                         \
-        if (stack32)                                                                                                                    \
+        if (__builtin_expect(stack32, true))                                                                                                                    \
                 uop_MEM_LOAD_REG(ir, IREG_temp0_W, IREG_SS_base, IREG_ESP);                                                             \
         else                                                                                                                            \
         {                                                                                                                               \
@@ -241,7 +241,7 @@ uint32_t ropPOP_ ## seg ## _32(codeblock_t *block, ir_data_t *ir, uint8_t opcode
 {                                                                                                                                       \
         uop_MOV_IMM(ir, IREG_oldpc, cpu_state.oldpc);                                                                                   \
                                                                                                                                         \
-        if (stack32)                                                                                                                    \
+        if (__builtin_expect(stack32, true))                                                                                                                    \
                 uop_MEM_LOAD_REG(ir, IREG_temp0_W, IREG_SS_base, IREG_ESP);                                                             \
         else                                                                                                                            \
         {                                                                                                                               \
@@ -270,7 +270,7 @@ uint32_t ropLEAVE_16(codeblock_t *block, ir_data_t *ir, uint8_t opcode, uint32_t
 {
         uop_MOV_IMM(ir, IREG_oldpc, cpu_state.oldpc);
 
-        if (stack32)
+        if (__builtin_expect(stack32, true))
                 uop_MEM_LOAD_REG(ir, IREG_temp0_W, IREG_SS_base, IREG_EBP);
         else
         {
@@ -286,7 +286,7 @@ uint32_t ropLEAVE_32(codeblock_t *block, ir_data_t *ir, uint8_t opcode, uint32_t
 {
         uop_MOV_IMM(ir, IREG_oldpc, cpu_state.oldpc);
 
-        if (stack32)
+        if (__builtin_expect(stack32, true))
                 uop_MEM_LOAD_REG(ir, IREG_temp0, IREG_SS_base, IREG_EBP);
         else
         {

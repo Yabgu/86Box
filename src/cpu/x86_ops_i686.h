@@ -135,7 +135,7 @@ fx_save_stor_common(uint32_t fetchdat, int bits)
 	cpu_state.eaaddr = old_eaaddr + 144;
 	x87_ldmmx(&(cpu_state.MM[7]), &(cpu_state.MM_w4[7])); x87_ld_frstor(7);
 
-	cpu_state.ismmx = 0;
+	cpu_state.ismmx = false;
 	/*Horrible hack, but as 86Box doesn't keep the FPU stack in 80-bit precision at all times
 	  something like this is needed*/
 	p = (uint64_t *) cpu_state.tag;
@@ -148,7 +148,7 @@ fx_save_stor_common(uint32_t fetchdat, int bits)
 	    cpu_state.MM_w4[4] == 0xffff && cpu_state.MM_w4[5] == 0xffff && cpu_state.MM_w4[6] == 0xffff && cpu_state.MM_w4[7] == 0xffff &&
 	    !cpu_state.TOP && !(*p))
 #endif
-		cpu_state.ismmx = 1;
+		cpu_state.ismmx = true;
 
 	x87_settag(rec_ftw);
 
@@ -211,7 +211,7 @@ fx_save_stor_common(uint32_t fetchdat, int bits)
         *p = 0x0303030303030303ll;
 #endif
 	cpu_state.TOP = 0;
-	cpu_state.ismmx = 0;
+	cpu_state.ismmx = false;
 
 	CLOCK_CYCLES((cr0 & 1) ? 56 : 67);
     }

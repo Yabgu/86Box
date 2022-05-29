@@ -115,7 +115,7 @@ uint32_t ropRET_16(codeblock_t *block, ir_data_t *ir, uint8_t opcode, uint32_t f
 {
         uop_MOV_IMM(ir, IREG_oldpc, cpu_state.oldpc);
 
-        if (stack32)
+        if (__builtin_expect(stack32, true))
                 uop_MEM_LOAD_REG(ir, IREG_temp0_W, IREG_SS_base, IREG_ESP);
         else
         {
@@ -131,7 +131,7 @@ uint32_t ropRET_32(codeblock_t *block, ir_data_t *ir, uint8_t opcode, uint32_t f
 {
         uop_MOV_IMM(ir, IREG_oldpc, cpu_state.oldpc);
 
-        if (stack32)
+        if (__builtin_expect(stack32, true))
                 uop_MEM_LOAD_REG(ir, IREG_pc, IREG_SS_base, IREG_ESP);
         else
         {
@@ -149,7 +149,7 @@ uint32_t ropRET_imm_16(codeblock_t *block, ir_data_t *ir, uint8_t opcode, uint32
 
         uop_MOV_IMM(ir, IREG_oldpc, cpu_state.oldpc);
 
-        if (stack32)
+        if (__builtin_expect(stack32, true))
                 uop_MEM_LOAD_REG(ir, IREG_temp0_W, IREG_SS_base, IREG_ESP);
         else
         {
@@ -168,7 +168,7 @@ uint32_t ropRET_imm_32(codeblock_t *block, ir_data_t *ir, uint8_t opcode, uint32
 
         uop_MOV_IMM(ir, IREG_oldpc, cpu_state.oldpc);
 
-        if (stack32)
+        if (__builtin_expect(stack32, true))
                 uop_MEM_LOAD_REG(ir, IREG_pc, IREG_SS_base, IREG_ESP);
         else
         {
@@ -188,7 +188,7 @@ uint32_t ropRETF_16(codeblock_t *block, ir_data_t *ir, uint8_t opcode, uint32_t 
 
         uop_MOV_IMM(ir, IREG_oldpc, cpu_state.oldpc);
 
-        if (stack32)
+        if (__builtin_expect(stack32, true))
         {
                 uop_MEM_LOAD_REG(ir, IREG_temp0_W, IREG_SS_base, IREG_ESP);
                 uop_MEM_LOAD_REG_OFFSET(ir, IREG_temp1_W, IREG_SS_base, IREG_ESP, 2);
@@ -213,7 +213,7 @@ uint32_t ropRETF_32(codeblock_t *block, ir_data_t *ir, uint8_t opcode, uint32_t 
 
         uop_MOV_IMM(ir, IREG_oldpc, cpu_state.oldpc);
 
-        if (stack32)
+        if (__builtin_expect(stack32, true))
         {
                 uop_MEM_LOAD_REG(ir, IREG_temp0, IREG_SS_base, IREG_ESP);
                 uop_MEM_LOAD_REG_OFFSET(ir, IREG_temp1_W, IREG_SS_base, IREG_ESP, 4);
@@ -242,7 +242,7 @@ uint32_t ropRETF_imm_16(codeblock_t *block, ir_data_t *ir, uint8_t opcode, uint3
         offset = fastreadw(cs + op_pc);
         uop_MOV_IMM(ir, IREG_oldpc, cpu_state.oldpc);
 
-        if (stack32)
+        if (__builtin_expect(stack32, true))
         {
                 uop_MEM_LOAD_REG(ir, IREG_temp0_W, IREG_SS_base, IREG_ESP);
                 uop_MEM_LOAD_REG_OFFSET(ir, IREG_temp1_W, IREG_SS_base, IREG_ESP, 2);
@@ -271,7 +271,7 @@ uint32_t ropRETF_imm_32(codeblock_t *block, ir_data_t *ir, uint8_t opcode, uint3
         offset = fastreadw(cs + op_pc);
         uop_MOV_IMM(ir, IREG_oldpc, cpu_state.oldpc);
 
-        if (stack32)
+        if (__builtin_expect(stack32, true))
         {
                 uop_MEM_LOAD_REG(ir, IREG_temp0, IREG_SS_base, IREG_ESP);
                 uop_MEM_LOAD_REG_OFFSET(ir, IREG_temp1_W, IREG_SS_base, IREG_ESP, 4);

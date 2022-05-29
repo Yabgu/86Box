@@ -112,10 +112,11 @@ int		isa_cycles, cpu_inited,
 		cpu_isa_speed, cpu_pci_speed, cpu_isa_pci_div, cpu_agp_speed, cpu_alt_reset,
 
 		cpu_override, cpu_effective, cpu_multi, cpu_16bitbus, cpu_64bitbus, cpu_busspeed,
-		cpu_cyrix_alignment, CPUID,
+		cpu_cyrix_alignment, CPUID;
 
- 		is286, is386, is486 = 1,
-		cpu_isintel, cpu_iscyrix, hascache, isibm486, israpidcad, is_vpc,
+bool	is286, is386, is486 = true;
+
+int		cpu_isintel, cpu_iscyrix, hascache, isibm486, israpidcad, is_vpc,
 		is_am486, is_am486dxl, is_pentium, is_k5, is_k6, is_p6, is_cxsmm, hasfpu,
 
 		timing_rr, timing_mr, timing_mrl, timing_rm, timing_rml,

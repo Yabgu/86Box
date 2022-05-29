@@ -12,7 +12,7 @@ static __inline void x87_set_mmx()
         cpu_state.TOP = 0;
 	p = (uint64_t *)cpu_state.tag;
         *p = 0x0101010101010101ull;
-        cpu_state.ismmx = 1;
+        cpu_state.ismmx = true;
 }
 
 static __inline void x87_emms()
@@ -20,7 +20,7 @@ static __inline void x87_emms()
 	uint64_t *p;
 	p = (uint64_t *)cpu_state.tag;
         *p = 0;
-        cpu_state.ismmx = 0;
+        cpu_state.ismmx = false;
 }
 
 

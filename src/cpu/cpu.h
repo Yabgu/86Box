@@ -21,6 +21,9 @@
 #ifndef EMU_CPU_H
 # define EMU_CPU_H
 
+#include <stdbool.h>
+#include "x86.h"
+
 enum {
 	FPU_NONE,
 	FPU_8087,
@@ -351,8 +354,12 @@ typedef struct {
 	int32_t		rm_mod_reg_data;
     }		rm_data;
 
-    uint8_t	ssegs, ismmx,
-		abrt, _smi_line;
+    uint8_t	ssegs;
+    bool ismmx;
+    enum cpu_abort_state_t abrt;
+    uint8_t _smi_line;
+
+
 
 #ifdef FPU_CYCLES
     int		_cycles, _fpu_cycles, _in_smm;

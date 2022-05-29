@@ -1,4 +1,5 @@
 #include <stdarg.h>
+#include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
@@ -47,7 +48,16 @@
 #define CPU_BLOCK_END() cpu_block_end = 1
 
 
-int inrecomp = 0, cpu_block_end = 0;
+#ifdef USE_ACYCS
+static bool inrecomp = false;
+#define GET_INT_RECOMP() (intrecomp)
+#define SET_INT_RECOMP(val) ((intrecomp) = (val))
+#else
+#define GET_INT_RECOMP()
+#define SET_INT_RECOMP(val)
+#endif
+
+int cpu_block_end = 0;
 int cpu_end_block_after_ins = 0;
 
 
@@ -180,8 +190,8 @@ static __inline void fetch_ea_16_long(uint32_t rmdat)
 	}
 }
 
-#define fetch_ea_16(rmdat)	      cpu_state.pc++; cpu_mod=(rmdat >> 6) & 3; cpu_reg=(rmdat >> 3) & 7; cpu_rm = rmdat & 7; if (cpu_mod != 3) { fetch_ea_16_long(rmdat); if (cpu_state.abrt) return 1; }
-#define fetch_ea_32(rmdat)	      cpu_state.pc++; cpu_mod=(rmdat >> 6) & 3; cpu_reg=(rmdat >> 3) & 7; cpu_rm = rmdat & 7; if (cpu_mod != 3) { fetch_ea_32_long(rmdat); } if (cpu_state.abrt) return 1
+#define fetch_ea_16(rmdat)	      cpu_state.pc++; cpu_mod=(rmdat >> 6) & 3; cpu_reg=(rmdat >> 3) & 7; cpu_rm = rmdat & 7; if (cpu_mod != 3) { fetch_ea_16_long(rmdat); if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1; }
+#define fetch_ea_32(rmdat)	      cpu_state.pc++; cpu_mod=(rmdat >> 6) & 3; cpu_reg=(rmdat >> 3) & 7; cpu_rm = rmdat & 7; if (cpu_mod != 3) { fetch_ea_32_long(rmdat); } if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1
 
 #include "x86_flags.h"
 
@@ -318,7 +328,7 @@ update_tsc(void)
 
     cycdiff = cycles_old - cycles;
 #ifdef USE_ACYCS
-    if (inrecomp)
+    if (GET_INT_RECOMP())
 	cycdiff += acycs;
 #endif
 
@@ -386,7 +396,7 @@ exec386_dynarec_int(void)
 			CPU_BLOCK_END();
 	}
 
-	if (cpu_state.abrt)
+	if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false))
 		CPU_BLOCK_END();
 	if (smi_line)
 		CPU_BLOCK_END();
@@ -545,12 +555,15 @@ exec386_dynarec_dyn(void)
 #ifndef USE_NEW_DYNAREC
 	codeblock_hash[hash] = block;
 #endif
-	inrecomp = 1;
+
+	SET_INT_RECOMP(true);
+
 	code();
 #ifdef USE_ACYCS
 	acycs = 0;
 #endif
-	inrecomp = 0;
+
+	SET_INT_RECOMP(false);
 
 #ifndef USE_NEW_DYNAREC
 	if (!use32) cpu_state.pc &= 0xffff;
@@ -634,7 +647,7 @@ exec386_dynarec_dyn(void)
 				CPU_BLOCK_END();
 		}
 
-		if (cpu_state.abrt) {
+		if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) {
 			if (!(cpu_state.abrt & ABRT_EXPECTED))
 				codegen_block_remove();
 			CPU_BLOCK_END();
@@ -729,7 +742,7 @@ exec386_dynarec_dyn(void)
 				CPU_BLOCK_END();
 		}
 
-		if (cpu_state.abrt) {
+		if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) {
 			if (!(cpu_state.abrt & ABRT_EXPECTED))
 				codegen_block_remove();
 			CPU_BLOCK_END();
@@ -793,20 +806,20 @@ exec386_dynarec(int cycs)
 			exec386_dynarec_dyn();
 		}
 
-		if (cpu_state.abrt) {
+		if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) {
 			flags_rebuild();
 			tempi = cpu_state.abrt & ABRT_MASK;
-			cpu_state.abrt = 0;
+			cpu_state.abrt = ABRT_NONE;
 			x86_doabrt(tempi);
-			if (cpu_state.abrt) {
-				cpu_state.abrt = 0;
+			if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) {
+				cpu_state.abrt = ABRT_NONE;
 				cpu_state.pc = cpu_state.oldpc;
 #ifndef USE_NEW_DYNAREC
 				CS = oldcs;
 #endif
 				pmodeint(8, 0);
-				if (cpu_state.abrt) {
-					cpu_state.abrt = 0;
+				if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) {
+					cpu_state.abrt = ABRT_NONE;
 					softresetx86();
 					cpu_set_edx();
 #ifdef ENABLE_386_DYNAREC_LOG

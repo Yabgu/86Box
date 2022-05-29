@@ -13,7 +13,7 @@ static int opPUNPCKLDQ_a16(uint32_t fetchdat)
                 uint32_t src;
 
                 SEG_CHECK_READ(cpu_state.ea_seg);
-                src = readmeml(easeg, cpu_state.eaaddr); if (cpu_state.abrt) return 0;
+                src = readmeml(easeg, cpu_state.eaaddr); if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 0;
                 cpu_state.MM[cpu_reg].l[1] = src;
 
                 CLOCK_CYCLES(2);
@@ -35,7 +35,7 @@ static int opPUNPCKLDQ_a32(uint32_t fetchdat)
                 uint32_t src;
 
                 SEG_CHECK_READ(cpu_state.ea_seg);
-                src = readmeml(easeg, cpu_state.eaaddr); if (cpu_state.abrt) return 0;
+                src = readmeml(easeg, cpu_state.eaaddr); if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 0;
                 cpu_state.MM[cpu_reg].l[1] = src;
 
                 CLOCK_CYCLES(2);

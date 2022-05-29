@@ -60,7 +60,7 @@ static int opFINIT(uint32_t fetchdat)
         *p = 0x0303030303030303ll;
 #endif
         cpu_state.TOP = 0;
-	cpu_state.ismmx = 0;
+	cpu_state.ismmx = false;
         CLOCK_CYCLES_FPU((fpu_type >= FPU_487SX) ? (x87_timings.finit) : (x87_timings.finit * cpu_multi));
         CONCURRENCY_CYCLES((fpu_type >= FPU_487SX) ? (x87_concurrency.finit) : (x87_concurrency.finit * cpu_multi));
 	CPU_BLOCK_END();
@@ -86,7 +86,7 @@ static int opFFREEP(uint32_t fetchdat)
 {
         FP_ENTER();
         cpu_state.pc++;
-        cpu_state.tag[(cpu_state.TOP + fetchdat) & 7] = 3; if (cpu_state.abrt) return 1;
+        cpu_state.tag[(cpu_state.TOP + fetchdat) & 7] = 3; if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         x87_pop();
         CLOCK_CYCLES_FPU((fpu_type >= FPU_487SX) ? (x87_timings.ffree) : (x87_timings.ffree * cpu_multi));
         CONCURRENCY_CYCLES((fpu_type >= FPU_487SX) ? (x87_concurrency.ffree) : (x87_concurrency.ffree * cpu_multi));
@@ -153,7 +153,7 @@ static int FSTOR()
         x87_ld_frstor(6); cpu_state.eaaddr += 10;
         x87_ld_frstor(7);
 
-        cpu_state.ismmx = 0;
+        cpu_state.ismmx = false;
         /*Horrible hack, but as PCem doesn't keep the FPU stack in 80-bit precision at all times
           something like this is needed*/
 	p = (uint64_t *) cpu_state.tag;
@@ -166,7 +166,7 @@ static int FSTOR()
             cpu_state.MM_w4[4] == 0xffff && cpu_state.MM_w4[5] == 0xffff && cpu_state.MM_w4[6] == 0xffff && cpu_state.MM_w4[7] == 0xffff &&
             !cpu_state.TOP && !(*p))
  #endif
-		cpu_state.ismmx = 1;
+		cpu_state.ismmx = true;
 
         CLOCK_CYCLES_FPU((fpu_type >= FPU_487SX) ? (x87_timings.frstor) : (x87_timings.frstor * cpu_multi));
         CONCURRENCY_CYCLES((fpu_type >= FPU_487SX) ? (x87_concurrency.frstor) : (x87_concurrency.frstor * cpu_multi));
@@ -337,7 +337,7 @@ static int FSAVE()
         *p = 0x0303030303030303ll;
 #endif
         cpu_state.TOP = 0;
-        cpu_state.ismmx = 0;
+        cpu_state.ismmx = false;
 
         CLOCK_CYCLES_FPU((fpu_type >= FPU_487SX) ? (x87_timings.fsave) : (x87_timings.fsave * cpu_multi));
         CONCURRENCY_CYCLES((fpu_type >= FPU_487SX) ? (x87_concurrency.fsave) : (x87_concurrency.fsave * cpu_multi));
@@ -804,7 +804,7 @@ static int opFLDCW_a16(uint32_t fetchdat)
         fetch_ea_16(fetchdat);
         SEG_CHECK_READ(cpu_state.ea_seg);
         tempw = geteaw();
-        if (cpu_state.abrt) return 1;
+        if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         cpu_state.npxc = tempw;
         codegen_set_rounding_mode((cpu_state.npxc >> 10) & 3);
         CLOCK_CYCLES_FPU((fpu_type >= FPU_487SX) ? (x87_timings.fldcw) : (x87_timings.fldcw * cpu_multi));
@@ -819,7 +819,7 @@ static int opFLDCW_a32(uint32_t fetchdat)
         fetch_ea_32(fetchdat);
         SEG_CHECK_READ(cpu_state.ea_seg);
         tempw = geteaw();
-        if (cpu_state.abrt) return 1;
+        if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         cpu_state.npxc = tempw;
         codegen_set_rounding_mode((cpu_state.npxc >> 10) & 3);
         CLOCK_CYCLES_FPU((fpu_type >= FPU_487SX) ? (x87_timings.fldcw) : (x87_timings.fldcw * cpu_multi));

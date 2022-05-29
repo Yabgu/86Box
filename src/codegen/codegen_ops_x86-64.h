@@ -3086,7 +3086,7 @@ static inline int CMP_HOST_REG_IMM_L(int host_reg, uint32_t imm)
 
 static inline void LOAD_STACK_TO_EA(int off)
 {
-        if (stack32)
+        if (__builtin_expect(stack32, true))
         {
                 addbyte(0x8b); /*MOVL EAX,[ESP]*/
                 addbyte(0x45 | (REG_EAX << 3));
@@ -3114,7 +3114,7 @@ static inline void LOAD_STACK_TO_EA(int off)
 }
 static inline void LOAD_EBP_TO_EA(int off)
 {
-        if (stack32)
+        if (__builtin_expect(stack32, true))
         {
                 addbyte(0x8b); /*MOVL EAX,[EBP]*/
                 addbyte(0x45 | (REG_EAX << 3));
@@ -3143,7 +3143,7 @@ static inline void LOAD_EBP_TO_EA(int off)
 
 static inline void SP_MODIFY(int off)
 {
-        if (stack32)
+        if (__builtin_expect(stack32, true))
         {
                 if (off < 0x80)
                 {

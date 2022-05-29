@@ -1248,7 +1248,7 @@ static inline x86seg *FETCH_EA(x86seg *op_ea_seg, uint32_t fetchdat, int op_sseg
 
 static inline void LOAD_STACK_TO_EA(int off)
 {
-        if (stack32)
+        if (__builtin_expect(stack32, true))
         {
                 addbyte(0x8b); /*MOVL EAX,[ESP]*/
                 addbyte(0x45 | (REG_EAX << 3));
@@ -1277,7 +1277,7 @@ static inline void LOAD_STACK_TO_EA(int off)
 
 static inline void LOAD_EBP_TO_EA(int off)
 {
-        if (stack32)
+        if (__builtin_expect(stack32, true))
         {
                 addbyte(0x8b); /*MOVL EAX,[EBP]*/
                 addbyte(0x45 | (REG_EAX << 3));
@@ -1306,7 +1306,7 @@ static inline void LOAD_EBP_TO_EA(int off)
 
 static inline void SP_MODIFY(int off)
 {
-        if (stack32)
+        if (__builtin_expect(stack32, true))
         {
                 if (off < 0x80)
                 {

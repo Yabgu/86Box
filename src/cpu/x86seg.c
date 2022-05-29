@@ -118,7 +118,7 @@ x86_doabrt(int x86_abrt)
 	pmodeint(x86_abrt, 0);
     else {
 	uint32_t addr = (x86_abrt << 2) + idt.base;
-	if (stack32) {
+	if (__builtin_expect(stack32, true)) {
 		writememw(ss, ESP - 2, cpu_state.flags);
 		writememw(ss, ESP - 4, CS);
 		writememw(ss, ESP - 6, cpu_state.pc);
@@ -143,7 +143,7 @@ x86_doabrt(int x86_abrt)
 	return;
 
     if (intgatesize == 16) {
-	if (stack32) {
+	if (__builtin_expect(stack32, true)) {
 		writememw(ss, ESP - 2, abrt_error);
 		ESP -= 2;
 	} else {
@@ -151,7 +151,7 @@ x86_doabrt(int x86_abrt)
 		SP -= 2;
 	}
     } else {
-	if (stack32) {
+	if (__builtin_expect(stack32, true)) {
 		writememl(ss, ESP - 4, abrt_error);
 		ESP -= 4;
 	} else {
@@ -202,14 +202,14 @@ x86np(char *s, uint16_t error)
 
 
 static void
-set_stack32(int s)
+set_stack32(bool s)
 {
     stack32 = s;
 
-    if (stack32)
-	cpu_cur_status |= CPU_STATUS_STACK32;
+    if (__builtin_expect(stack32, true))
+		cpu_cur_status |= CPU_STATUS_STACK32;
     else
-	cpu_cur_status &= ~CPU_STATUS_STACK32;
+		cpu_cur_status &= ~CPU_STATUS_STACK32;
 }
 
 
@@ -370,7 +370,7 @@ loadseg(uint16_t seg, x86seg *s)
 	}
 	addr += dt->base;
 	read_descriptor(addr, segdat, segdat32, 1);
-	if (cpu_state.abrt)
+	if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false))
 #ifdef USE_NEW_DYNAREC
 		return 1;
 #else
@@ -539,7 +539,7 @@ loadcs(uint16_t seg)
 	addr += dt->base;
 
 	read_descriptor(addr, segdat, segdat32, 1);
-	if (cpu_state.abrt)
+	if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false))
 		return;
 	if (segdat[2] & 0x1000) {
 		/* Normal code segment */
@@ -626,7 +626,7 @@ loadcsjmp(uint16_t seg, uint32_t old_pc)
 	}
 	addr += dt->base;
 	read_descriptor(addr, segdat, segdat32, 1);
-	if (cpu_state.abrt)
+	if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false))
 		return;
 	x86seg_log("%04X %04X %04X %04X\n", segdat[0], segdat[1], segdat[2], segdat[3]);
 	if (segdat[2] & 0x1000) {
@@ -710,7 +710,7 @@ loadcsjmp(uint16_t seg, uint32_t old_pc)
 				}
 				addr += dt->base;
 				read_descriptor(addr, segdat, segdat32, 1);
-				if (cpu_state.abrt)
+				if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false))
 					return;
 
 				if (DPL > CPL) {
@@ -788,14 +788,14 @@ loadcsjmp(uint16_t seg, uint32_t old_pc)
 void
 PUSHW(uint16_t v)
 {
-    if (stack32) {
+    if (__builtin_expect(stack32, true)) {
 	writememw(ss, ESP - 2, v);
-	if (cpu_state.abrt)
+	if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false))
 		return;
 	ESP -= 2;
     } else {
 	writememw(ss, ((SP - 2) & 0xffff), v);
-	if (cpu_state.abrt)
+	if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false))
 		return;
 	SP -= 2;
     }
@@ -809,14 +809,14 @@ PUSHL(uint32_t v)
 	PUSHW(v >> 16);
 	PUSHW(v & 0xffff);
     } else {
-	if (stack32) {
+	if (__builtin_expect(stack32, true)) {
 		writememl(ss, ESP - 4, v);
-		if (cpu_state.abrt)
+		if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false))
 			return;
 		ESP -= 4;
 	} else {
 		writememl(ss, ((SP - 4) & 0xffff), v);
-		if (cpu_state.abrt)
+		if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false))
 			return;
 		SP -= 4;
 	}
@@ -828,14 +828,14 @@ uint16_t
 POPW()
 {
     uint16_t tempw;
-    if (stack32) {
+    if (__builtin_expect(stack32, true)) {
 	tempw = readmemw(ss, ESP);
-	if (cpu_state.abrt)
+	if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false))
 		return 0;
 	ESP += 2;
     } else {
 	tempw = readmemw(ss, SP);
-	if (cpu_state.abrt)
+	if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false))
 		return 0;
 	SP += 2;
     }
@@ -852,14 +852,14 @@ POPL()
 	templ = POPW();
 	templ |= (POPW() << 16);
     } else {
-	if (stack32) {
+	if (__builtin_expect(stack32, true)) {
 		templ = readmeml(ss, ESP);
-		if (cpu_state.abrt)
+		if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false))
 			return 0;
 		ESP += 4;
 	} else {
 		templ = readmeml(ss, SP);
-		if (cpu_state.abrt)
+		if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false))
 			return 0;
 		SP += 4;
 	}
@@ -900,7 +900,7 @@ void loadcscall(uint16_t seg)
 	}
 	addr += dt->base;
 	read_descriptor(addr, segdat, segdat32, 1);
-	if (cpu_state.abrt)
+	if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false))
 		return;
 	type = segdat[2] & 0x0f00;
 	newpc = segdat[0];
@@ -991,7 +991,7 @@ void loadcscall(uint16_t seg)
 				}
 				addr += dt->base;
 				read_descriptor(addr, segdat, segdat32, 1);
-				if (cpu_state.abrt)
+				if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false))
 					return;
 
 					x86seg_log("Code seg2 call - %04X - %04X %04X %04X\n", seg2, segdat[0], segdat[1], segdat[2]);
@@ -1031,7 +1031,7 @@ void loadcscall(uint16_t seg)
 								newsp = readmemw(0, addr);
 							}
 							cpl_override = 0;
-							if (cpu_state.abrt)
+							if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false))
 								return;
 							x86seg_log("New stack %04X:%08X\n", newss, newsp);
 							if (!(newss & 0xfffc)) {
@@ -1048,7 +1048,7 @@ void loadcscall(uint16_t seg)
 							addr += dt->base;
 							x86seg_log("Read stack seg\n");
 							read_descriptor(addr, segdat2, segdat232, 1);
-							if (cpu_state.abrt)
+							if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false))
 								return;
 							x86seg_log("Read stack seg done!\n");
 							if (((newss & 0x0003) != DPL) || (DPL2 != DPL)) {
@@ -1063,11 +1063,11 @@ void loadcscall(uint16_t seg)
 								x86ss("Call gate loading SS not present", newss & 0xfffc);
 								return;
 							}
-							if (!stack32)
+							if (__builtin_expect(!stack32, false))
 								oldsp &= 0xffff;
 							SS = newss;
 							set_stack32((segdat2[3] & 0x0040) ? 1 : 0);
-							if (stack32)
+							if (__builtin_expect(stack32, true))
 								ESP = newsp;
 							else
 								SP = newsp;
@@ -1099,7 +1099,7 @@ void loadcscall(uint16_t seg)
 							if (type == 0x0c00) {
 								PUSHL(oldss);
 								PUSHL(oldsp2);
-								if (cpu_state.abrt) {
+								if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) {
 									SS = oldss;
 									ESP = oldsp2;
 #ifdef USE_NEW_DYNAREC
@@ -1110,7 +1110,7 @@ void loadcscall(uint16_t seg)
 								if (count) {
 									while (count--) {
 										PUSHL(readmeml(oldssbase, oldsp + (count << 2)));
-										if (cpu_state.abrt) {
+										if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) {
 											SS = oldss;
 											ESP = oldsp2;
 #ifdef USE_NEW_DYNAREC
@@ -1125,7 +1125,7 @@ void loadcscall(uint16_t seg)
 								PUSHW(oldss);
 								x86seg_log("Write SS to %04X:%04X\n", SS, SP);
 								PUSHW(oldsp2);
-								if (cpu_state.abrt) {
+								if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) {
 									SS = oldss;
 									ESP = oldsp2;
 #ifdef USE_NEW_DYNAREC
@@ -1139,7 +1139,7 @@ void loadcscall(uint16_t seg)
 										tempw = readmemw(oldssbase, (oldsp & 0xffff) + (count << 1));
 										x86seg_log("PUSH %04X\n", tempw);
 										PUSHW(tempw);
-										if (cpu_state.abrt) {
+										if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) {
 											SS = oldss;
 											ESP = oldsp2;
 #ifdef USE_NEW_DYNAREC
@@ -1234,7 +1234,7 @@ pmoderetf(int is32, uint16_t off)
 	x86seg_log("CS read from %04X:%04X\n", SS, SP);
 	seg = POPW();
     }
-    if (cpu_state.abrt)
+    if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false))
 	return;
 
     x86seg_log("Return to %04X:%08X\n", seg, newpc);
@@ -1255,7 +1255,7 @@ pmoderetf(int is32, uint16_t off)
     }
     addr += dt->base;
     read_descriptor(addr, segdat, segdat32, 1);
-    if (cpu_state.abrt) {
+    if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) {
 	ESP = oldsp;
 	return;
     }
@@ -1263,7 +1263,7 @@ pmoderetf(int is32, uint16_t off)
 
     x86seg_log("CPL %i RPL %i %i\n", CPL, seg & 0x0003, is32);
 
-    if (stack32)
+    if (__builtin_expect(stack32, true))
 	ESP += off;
     else
 	SP += off;
@@ -1344,14 +1344,14 @@ pmoderetf(int is32, uint16_t off)
 	if (is32) {
 		newsp = POPL();
 		newss = POPL();
-		if (cpu_state.abrt)
+		if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false))
 			return;
 	} else {
 		x86seg_log("SP read from %04X:%04X\n", SS, SP);
 		newsp = POPW();
 		x86seg_log("SS read from %04X:%04X\n", SS, SP);
 		newss = POPW();
-		if (cpu_state.abrt)
+		if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false))
 			return;
 	}
 	x86seg_log("Read new stack : %04X:%04X (%08X)\n", newss, newsp, ldt.base);
@@ -1369,7 +1369,7 @@ pmoderetf(int is32, uint16_t off)
 	}
 	addr += dt->base;
 	read_descriptor(addr, segdat2, segdat232, 1);
-	if (cpu_state.abrt) {
+	if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) {
 		ESP = oldsp;
 		return;
 	}
@@ -1396,7 +1396,7 @@ pmoderetf(int is32, uint16_t off)
 	}
 	SS = newss;
 	set_stack32((segdat2[3] & 0x0040) ? 1 : 0);
-	if (stack32)
+	if (__builtin_expect(stack32, true))
 		ESP = newsp;
 	else
 		SP = newsp;
@@ -1419,7 +1419,7 @@ pmoderetf(int is32, uint16_t off)
 #endif
 	set_use32(segdat[3] & 0x0040);
 
-	if (stack32)
+	if (__builtin_expect(stack32, true))
 		ESP += off;
 	else
 		SP += off;
@@ -1468,7 +1468,7 @@ pmodeint(int num, int soft)
     }
     addr += idt.base;
     read_descriptor(addr, segdat, segdat32, 1);
-    if (cpu_state.abrt) {
+    if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) {
 	x86seg_log("Abrt reading from %08X\n", addr);
 	return;
     }
@@ -1510,7 +1510,7 @@ pmodeint(int num, int soft)
 		}
 		addr += dt->base;
 		read_descriptor(addr, segdat2, segdat232, 1);
-		if (cpu_state.abrt)
+		if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false))
 			return;
 		oaddr = addr;
 
@@ -1555,7 +1555,7 @@ pmodeint(int num, int soft)
 					}
 					addr += dt->base;
 					read_descriptor(addr, segdat3, segdat332, 1);
-					if (cpu_state.abrt)
+					if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false))
 						return;
 					if ((newss & 3) != DPL2) {
 						x86ss("pmodeint(): Interrupt or trap gate tack segment RPL > DPL",newss & 0xfffc);
@@ -1575,7 +1575,7 @@ pmodeint(int num, int soft)
 					}
 					SS = newss;
 					set_stack32((segdat3[3] & 0x0040) ? 1 : 0);
-					if (stack32)
+					if (__builtin_expect(stack32, true))
 						ESP = newsp;
 					else
 						SP = newsp;
@@ -1593,7 +1593,7 @@ pmodeint(int num, int soft)
 							PUSHL(FS);
 							PUSHL(DS);
 							PUSHL(ES);
-							if (cpu_state.abrt)
+							if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false))
 								return;
 							loadseg(0, &cpu_state.seg_ds);
 							loadseg(0, &cpu_state.seg_es);
@@ -1605,7 +1605,7 @@ pmodeint(int num, int soft)
 						PUSHL(cpu_state.flags | (cpu_state.eflags << 16));
 						PUSHL(CS);
 						PUSHL(cpu_state.pc);
-						if (cpu_state.abrt)
+						if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false))
 							return;
 					} else {
 						PUSHW(oldss);
@@ -1613,7 +1613,7 @@ pmodeint(int num, int soft)
 						PUSHW(cpu_state.flags);
 						PUSHW(CS);
 						PUSHW(cpu_state.pc);
-						if (cpu_state.abrt)
+						if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false))
 							return;
 					}
 					cpl_override = 0;
@@ -1638,13 +1638,13 @@ pmodeint(int num, int soft)
 					PUSHL(cpu_state.flags | (cpu_state.eflags << 16));
 					PUSHL(CS);
 					PUSHL(cpu_state.pc);
-					if (cpu_state.abrt)
+					if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false))
 						return;
 				} else {
 					PUSHW(cpu_state.flags);
 					PUSHW(CS);
 					PUSHW(cpu_state.pc);
-					if (cpu_state.abrt)
+					if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false))
 						return;
 				}
 				new_cpl = CS & 3;
@@ -1689,7 +1689,7 @@ pmodeint(int num, int soft)
 		}
 		addr += dt->base;
 		read_descriptor(addr, segdat2, segdat232, 1);
-		if (cpu_state.abrt)
+		if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false))
 			return;
 		if (!(segdat2[2] & 0x8000)) {
 			x86np("Int task gate not present", segdat[1] & 0xfffc);
@@ -1739,7 +1739,7 @@ pmodeiret(int is32)
 		seg = POPW();
 		tempflags = POPW();
 	}
-	if (cpu_state.abrt)
+	if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false))
 		return;
 
 	cpu_state.pc = newpc;
@@ -1788,7 +1788,7 @@ pmodeiret(int is32)
 	newpc = POPL();
 	seg = POPL();
 	tempflags = POPL();
-	if (cpu_state.abrt) {
+	if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) {
 		ESP = oldsp;
 		return;
 	}
@@ -1799,7 +1799,7 @@ pmodeiret(int is32)
 		segs[1] = POPL();
 		segs[2] = POPL();
 		segs[3] = POPL();
-		if (cpu_state.abrt) {
+		if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) {
 			ESP = oldsp;
 			return;
 		}
@@ -1843,7 +1843,7 @@ pmodeiret(int is32)
 	newpc = POPW();
 	seg = POPW();
 	tempflags = POPW();
-	if (cpu_state.abrt) {
+	if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) {
 		ESP = oldsp;
 		return;
 	}
@@ -1868,7 +1868,7 @@ pmodeiret(int is32)
 	return;
     }
     read_descriptor(addr, segdat, segdat32, 1);
-    if (cpu_state.abrt) {
+    if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) {
 	ESP = oldsp;
 	return;
     }
@@ -1919,14 +1919,14 @@ pmodeiret(int is32)
 	if (is32) {
 		newsp = POPL();
 		newss = POPL();
-		if (cpu_state.abrt) {
+		if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) {
 			ESP = oldsp;
 			return;
 		}
 	} else {
 		newsp = POPW();
 		newss = POPW();
-		if (cpu_state.abrt) {
+		if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) {
 			ESP = oldsp;
 			return;
 		}
@@ -1948,7 +1948,7 @@ pmodeiret(int is32)
 	}
 	addr += dt->base;
 	read_descriptor(addr, segdat2, segdat232, 1);
-	if (cpu_state.abrt) {
+	if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) {
 		ESP = oldsp;
 		return;
 	}
@@ -1974,7 +1974,7 @@ pmodeiret(int is32)
 	}
 	SS = newss;
 	set_stack32((segdat2[3] & 0x40) ? 1 : 0);
-	if (stack32)
+	if (__builtin_expect(stack32, true))
 		ESP = newsp;
 	else
 		SP = newsp;
@@ -2042,7 +2042,7 @@ taskswitch286(uint16_t seg, uint16_t *segdat, int is32)
 			tempw = readmemw(ldt.base, (seg & 0xfff8) + 4);
 		else
 			tempw = readmemw(gdt.base, (seg & 0xfff8) + 4);
-		if (cpu_state.abrt)
+		if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false))
 			return;
 		tempw |= 0x0200;
 		if (tr.seg & 0x0004)
@@ -2050,7 +2050,7 @@ taskswitch286(uint16_t seg, uint16_t *segdat, int is32)
 		else
 			writememw(gdt.base, (seg & 0xfff8) + 4, tempw);
 	}
-	if (cpu_state.abrt)
+	if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false))
 		return;
 
 	if (optype == IRET)
@@ -2082,7 +2082,7 @@ taskswitch286(uint16_t seg, uint16_t *segdat, int is32)
 			tempw = readmemw(ldt.base, (tr.seg & 0xfff8) + 4);
 		else
 			tempw = readmemw(gdt.base, (tr.seg & 0xfff8) + 4);
-		if (cpu_state.abrt)
+		if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false))
 			return;
 		tempw &= ~0x0200;
 		if (tr.seg & 0x0004)
@@ -2090,12 +2090,12 @@ taskswitch286(uint16_t seg, uint16_t *segdat, int is32)
 		else
 			writememw(gdt.base, (tr.seg & 0xfff8) + 4, tempw);
 	}
-	if (cpu_state.abrt)
+	if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false))
 		return;
 
 	if ((optype == OPTYPE_INT) || (optype == CALL)) {
 		writememl(base, 0, tr.seg);
-		if (cpu_state.abrt)
+		if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false))
 			return;
 	}
 
@@ -2216,7 +2216,7 @@ taskswitch286(uint16_t seg, uint16_t *segdat, int is32)
 			tempw = readmemw(ldt.base, (seg & 0xfff8) + 4);
 		else
 			tempw = readmemw(gdt.base, (seg & 0xfff8) + 4);
-		if (cpu_state.abrt)
+		if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false))
 			return;
 		tempw |= 0x200;
 		if (tr.seg & 0x0004)
@@ -2224,7 +2224,7 @@ taskswitch286(uint16_t seg, uint16_t *segdat, int is32)
 		else
 			writememw(gdt.base, (seg & 0xfff8) + 4, tempw);
 	}
-	if (cpu_state.abrt)
+	if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false))
 		return;
 
 	if (optype == IRET)
@@ -2253,7 +2253,7 @@ taskswitch286(uint16_t seg, uint16_t *segdat, int is32)
 			tempw = readmemw(ldt.base, (tr.seg & 0xfff8) + 4);
 		else
 			tempw = readmemw(gdt.base, (tr.seg & 0xfff8) + 4);
-		if (cpu_state.abrt)
+		if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false))
 			return;
 		tempw &= ~0x200;
 		if (tr.seg & 0x0004)
@@ -2261,12 +2261,12 @@ taskswitch286(uint16_t seg, uint16_t *segdat, int is32)
 		else
 			writememw(gdt.base, (tr.seg & 0xfff8) + 4, tempw);
 	}
-	if (cpu_state.abrt)
+	if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false))
 		return;
 
 	if ((optype == OPTYPE_INT) || (optype == CALL)) {
 		writememw(base, 0, tr.seg);
-		if (cpu_state.abrt)
+		if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false))
 			return;
 	}
 

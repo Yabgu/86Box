@@ -296,7 +296,7 @@ static int opPMULLW_a16(uint32_t fetchdat)
 
                 SEG_CHECK_READ(cpu_state.ea_seg);
                 src.l[0] = readmeml(easeg, cpu_state.eaaddr);
-                src.l[1] = readmeml(easeg, cpu_state.eaaddr + 4); if (cpu_state.abrt) return 0;
+                src.l[1] = readmeml(easeg, cpu_state.eaaddr + 4); if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 0;
                 cpu_state.MM[cpu_reg].w[0] *= src.w[0];
                 cpu_state.MM[cpu_reg].w[1] *= src.w[1];
                 cpu_state.MM[cpu_reg].w[2] *= src.w[2];
@@ -324,7 +324,7 @@ static int opPMULLW_a32(uint32_t fetchdat)
 
                 SEG_CHECK_READ(cpu_state.ea_seg);
                 src.l[0] = readmeml(easeg, cpu_state.eaaddr);
-                src.l[1] = readmeml(easeg, cpu_state.eaaddr + 4); if (cpu_state.abrt) return 0;
+                src.l[1] = readmeml(easeg, cpu_state.eaaddr + 4); if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 0;
                 cpu_state.MM[cpu_reg].w[0] *= src.w[0];
                 cpu_state.MM[cpu_reg].w[1] *= src.w[1];
                 cpu_state.MM[cpu_reg].w[2] *= src.w[2];
@@ -353,7 +353,7 @@ static int opPMULHW_a16(uint32_t fetchdat)
 
                 SEG_CHECK_READ(cpu_state.ea_seg);
                 src.l[0] = readmeml(easeg, cpu_state.eaaddr);
-                src.l[1] = readmeml(easeg, cpu_state.eaaddr + 4); if (cpu_state.abrt) return 0;
+                src.l[1] = readmeml(easeg, cpu_state.eaaddr + 4); if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 0;
                 cpu_state.MM[cpu_reg].w[0] = ((int32_t)cpu_state.MM[cpu_reg].sw[0] * (int32_t)src.sw[0]) >> 16;
                 cpu_state.MM[cpu_reg].w[1] = ((int32_t)cpu_state.MM[cpu_reg].sw[1] * (int32_t)src.sw[1]) >> 16;
                 cpu_state.MM[cpu_reg].w[2] = ((int32_t)cpu_state.MM[cpu_reg].sw[2] * (int32_t)src.sw[2]) >> 16;
@@ -381,7 +381,7 @@ static int opPMULHW_a32(uint32_t fetchdat)
 
                 SEG_CHECK_READ(cpu_state.ea_seg);
                 src.l[0] = readmeml(easeg, cpu_state.eaaddr);
-                src.l[1] = readmeml(easeg, cpu_state.eaaddr + 4); if (cpu_state.abrt) return 0;
+                src.l[1] = readmeml(easeg, cpu_state.eaaddr + 4); if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 0;
                 cpu_state.MM[cpu_reg].w[0] = ((int32_t)cpu_state.MM[cpu_reg].sw[0] * (int32_t)src.sw[0]) >> 16;
                 cpu_state.MM[cpu_reg].w[1] = ((int32_t)cpu_state.MM[cpu_reg].sw[1] * (int32_t)src.sw[1]) >> 16;
                 cpu_state.MM[cpu_reg].w[2] = ((int32_t)cpu_state.MM[cpu_reg].sw[2] * (int32_t)src.sw[2]) >> 16;

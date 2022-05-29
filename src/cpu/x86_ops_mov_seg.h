@@ -147,7 +147,7 @@ static int opMOV_seg_w_a16(uint32_t fetchdat)
         fetch_ea_16(fetchdat);
         if (cpu_mod != 3)
                 SEG_CHECK_READ(cpu_state.ea_seg);
-        new_seg=geteaw();         if (cpu_state.abrt) return 1;
+        new_seg=geteaw();         if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
 
         switch (rmdat & 0x38)
         {
@@ -159,14 +159,14 @@ static int opMOV_seg_w_a16(uint32_t fetchdat)
                 break;
                 case 0x10: /*SS*/
                 loadseg(new_seg, &cpu_state.seg_ss);
-                if (cpu_state.abrt) return 1;
+                if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
                 cpu_state.oldpc = cpu_state.pc;
                 cpu_state.op32 = use32;
                 cpu_state.ssegs = 0;
                 cpu_state.ea_seg = &cpu_state.seg_ds;
                 fetchdat = fastreadl(cs + cpu_state.pc);
                 cpu_state.pc++;
-                if (cpu_state.abrt) return 1;
+                if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
                 x86_opcodes[(fetchdat & 0xff) | cpu_state.op32](fetchdat >> 8);
                 return 1;
                 case 0x20: /*FS*/
@@ -188,7 +188,7 @@ static int opMOV_seg_w_a32(uint32_t fetchdat)
         fetch_ea_32(fetchdat);
         if (cpu_mod != 3)
                 SEG_CHECK_READ(cpu_state.ea_seg);
-        new_seg=geteaw();         if (cpu_state.abrt) return 1;
+        new_seg=geteaw();         if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
 
         switch (rmdat & 0x38)
         {
@@ -200,14 +200,14 @@ static int opMOV_seg_w_a32(uint32_t fetchdat)
                 break;
                 case 0x10: /*SS*/
                 loadseg(new_seg, &cpu_state.seg_ss);
-                if (cpu_state.abrt) return 1;
+                if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
                 cpu_state.oldpc = cpu_state.pc;
                 cpu_state.op32 = use32;
                 cpu_state.ssegs = 0;
                 cpu_state.ea_seg = &cpu_state.seg_ds;
                 fetchdat = fastreadl(cs + cpu_state.pc);
                 cpu_state.pc++;
-                if (cpu_state.abrt) return 1;
+                if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
                 x86_opcodes[(fetchdat & 0xff) | cpu_state.op32](fetchdat >> 8);
                 return 1;
                 case 0x20: /*FS*/
@@ -233,8 +233,8 @@ static int opLDS_w_a16(uint32_t fetchdat)
         SEG_CHECK_READ(cpu_state.ea_seg);
         CHECK_READ(cpu_state.ea_seg, cpu_state.eaaddr, cpu_state. eaaddr + 3);
         addr = readmemw(easeg, cpu_state.eaaddr);
-        seg = readmemw(easeg, cpu_state.eaaddr + 2);      if (cpu_state.abrt) return 1;
-        loadseg(seg, &cpu_state.seg_ds);                  if (cpu_state.abrt) return 1;
+        seg = readmemw(easeg, cpu_state.eaaddr + 2);      if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
+        loadseg(seg, &cpu_state.seg_ds);                  if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         cpu_state.regs[cpu_reg].w = addr;
 
         CLOCK_CYCLES(7);
@@ -250,8 +250,8 @@ static int opLDS_w_a32(uint32_t fetchdat)
         SEG_CHECK_READ(cpu_state.ea_seg);
         CHECK_READ(cpu_state.ea_seg, cpu_state.eaaddr, cpu_state. eaaddr + 3);
         addr = readmemw(easeg, cpu_state.eaaddr);
-        seg = readmemw(easeg, cpu_state.eaaddr + 2);      if (cpu_state.abrt) return 1;
-        loadseg(seg, &cpu_state.seg_ds);                  if (cpu_state.abrt) return 1;
+        seg = readmemw(easeg, cpu_state.eaaddr + 2);      if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
+        loadseg(seg, &cpu_state.seg_ds);                  if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         cpu_state.regs[cpu_reg].w = addr;
 
         CLOCK_CYCLES(7);
@@ -268,8 +268,8 @@ static int opLDS_l_a16(uint32_t fetchdat)
         SEG_CHECK_READ(cpu_state.ea_seg);
         CHECK_READ(cpu_state.ea_seg, cpu_state.eaaddr, cpu_state. eaaddr + 5);
         addr = readmeml(easeg, cpu_state.eaaddr);
-        seg = readmemw(easeg, cpu_state.eaaddr + 4);      if (cpu_state.abrt) return 1;
-        loadseg(seg, &cpu_state.seg_ds);                  if (cpu_state.abrt) return 1;
+        seg = readmemw(easeg, cpu_state.eaaddr + 4);      if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
+        loadseg(seg, &cpu_state.seg_ds);                  if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         cpu_state.regs[cpu_reg].l = addr;
 
         CLOCK_CYCLES(7);
@@ -286,8 +286,8 @@ static int opLDS_l_a32(uint32_t fetchdat)
         SEG_CHECK_READ(cpu_state.ea_seg);
         CHECK_READ(cpu_state.ea_seg, cpu_state.eaaddr, cpu_state. eaaddr + 5);
         addr = readmeml(easeg, cpu_state.eaaddr);
-        seg = readmemw(easeg, cpu_state.eaaddr + 4);      if (cpu_state.abrt) return 1;
-        loadseg(seg, &cpu_state.seg_ds);                  if (cpu_state.abrt) return 1;
+        seg = readmemw(easeg, cpu_state.eaaddr + 4);      if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
+        loadseg(seg, &cpu_state.seg_ds);                  if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         cpu_state.regs[cpu_reg].l = addr;
 
         CLOCK_CYCLES(7);
@@ -304,8 +304,8 @@ static int opLSS_w_a16(uint32_t fetchdat)
         SEG_CHECK_READ(cpu_state.ea_seg);
         CHECK_READ(cpu_state.ea_seg, cpu_state.eaaddr, cpu_state.eaaddr + 3);
         addr = readmemw(easeg, cpu_state.eaaddr);
-        seg = readmemw(easeg, cpu_state.eaaddr + 2);      if (cpu_state.abrt) return 1;
-        loadseg(seg, &cpu_state.seg_ss);                  if (cpu_state.abrt) return 1;
+        seg = readmemw(easeg, cpu_state.eaaddr + 2);      if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
+        loadseg(seg, &cpu_state.seg_ss);                  if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         cpu_state.regs[cpu_reg].w = addr;
 
         CLOCK_CYCLES(7);
@@ -321,8 +321,8 @@ static int opLSS_w_a32(uint32_t fetchdat)
         SEG_CHECK_READ(cpu_state.ea_seg);
         CHECK_READ(cpu_state.ea_seg, cpu_state.eaaddr, cpu_state.eaaddr + 3);
         addr = readmemw(easeg, cpu_state.eaaddr);
-        seg = readmemw(easeg, cpu_state.eaaddr + 2);      if (cpu_state.abrt) return 1;
-        loadseg(seg, &cpu_state.seg_ss);                  if (cpu_state.abrt) return 1;
+        seg = readmemw(easeg, cpu_state.eaaddr + 2);      if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
+        loadseg(seg, &cpu_state.seg_ss);                  if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         cpu_state.regs[cpu_reg].w = addr;
 
         CLOCK_CYCLES(7);
@@ -339,8 +339,8 @@ static int opLSS_l_a16(uint32_t fetchdat)
         SEG_CHECK_READ(cpu_state.ea_seg);
         CHECK_READ(cpu_state.ea_seg, cpu_state.eaaddr, cpu_state.eaaddr + 5);
         addr = readmeml(easeg, cpu_state.eaaddr);
-        seg = readmemw(easeg, cpu_state.eaaddr + 4);      if (cpu_state.abrt) return 1;
-        loadseg(seg, &cpu_state.seg_ss);                  if (cpu_state.abrt) return 1;
+        seg = readmemw(easeg, cpu_state.eaaddr + 4);      if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
+        loadseg(seg, &cpu_state.seg_ss);                  if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         cpu_state.regs[cpu_reg].l = addr;
 
         CLOCK_CYCLES(7);
@@ -357,8 +357,8 @@ static int opLSS_l_a32(uint32_t fetchdat)
         SEG_CHECK_READ(cpu_state.ea_seg);
         CHECK_READ(cpu_state.ea_seg, cpu_state.eaaddr, cpu_state.eaaddr + 5);
         addr = readmeml(easeg, cpu_state.eaaddr);
-        seg = readmemw(easeg, cpu_state.eaaddr + 4);      if (cpu_state.abrt) return 1;
-        loadseg(seg, &cpu_state.seg_ss);                  if (cpu_state.abrt) return 1;
+        seg = readmemw(easeg, cpu_state.eaaddr + 4);      if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
+        loadseg(seg, &cpu_state.seg_ss);                  if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
         cpu_state.regs[cpu_reg].l = addr;
 
         CLOCK_CYCLES(7);
@@ -376,8 +376,8 @@ static int opLSS_l_a32(uint32_t fetchdat)
                 ILLEGAL_ON(cpu_mod == 3);                                           \
                 CHECK_READ(cpu_state.ea_seg, cpu_state.eaaddr, cpu_state.eaaddr + 3); \
                 addr = readmemw(easeg, cpu_state.eaaddr);                                 \
-                seg = readmemw(easeg, cpu_state.eaaddr + 2);      if (cpu_state.abrt) return 1;     \
-                loadseg(seg, &sel);                     if (cpu_state.abrt) return 1;     \
+                seg = readmemw(easeg, cpu_state.eaaddr + 2);      if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;     \
+                loadseg(seg, &sel);                     if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;     \
                 cpu_state.regs[cpu_reg].w = addr;                                   \
                                                                                 \
                 CLOCK_CYCLES(7);                                                \
@@ -394,8 +394,8 @@ static int opLSS_l_a32(uint32_t fetchdat)
                 ILLEGAL_ON(cpu_mod == 3);                                           \
                 CHECK_READ(cpu_state.ea_seg, cpu_state.eaaddr, cpu_state.eaaddr + 3); \
                 addr = readmemw(easeg, cpu_state.eaaddr);                                 \
-                seg = readmemw(easeg, cpu_state.eaaddr + 2);      if (cpu_state.abrt) return 1;     \
-                loadseg(seg, &sel);                     if (cpu_state.abrt) return 1;     \
+                seg = readmemw(easeg, cpu_state.eaaddr + 2);      if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;     \
+                loadseg(seg, &sel);                     if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;     \
                 cpu_state.regs[cpu_reg].w = addr;                                   \
                                                                                 \
                 CLOCK_CYCLES(7);                                                \
@@ -413,8 +413,8 @@ static int opLSS_l_a32(uint32_t fetchdat)
                 ILLEGAL_ON(cpu_mod == 3);                                           \
                 CHECK_READ(cpu_state.ea_seg, cpu_state.eaaddr, cpu_state.eaaddr + 5); \
                 addr = readmeml(easeg, cpu_state.eaaddr);                                 \
-                seg = readmemw(easeg, cpu_state.eaaddr + 4);      if (cpu_state.abrt) return 1;     \
-                loadseg(seg, &sel);                     if (cpu_state.abrt) return 1;     \
+                seg = readmemw(easeg, cpu_state.eaaddr + 4);      if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;     \
+                loadseg(seg, &sel);                     if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;     \
                 cpu_state.regs[cpu_reg].l = addr;                                   \
                                                                                 \
                 CLOCK_CYCLES(7);                                                \
@@ -432,8 +432,8 @@ static int opLSS_l_a32(uint32_t fetchdat)
                 ILLEGAL_ON(cpu_mod == 3);                                           \
                 CHECK_READ(cpu_state.ea_seg, cpu_state.eaaddr, cpu_state.eaaddr + 5); \
                 addr = readmeml(easeg, cpu_state.eaaddr);                                 \
-                seg = readmemw(easeg, cpu_state.eaaddr + 4);      if (cpu_state.abrt) return 1;     \
-                loadseg(seg, &sel);                     if (cpu_state.abrt) return 1;     \
+                seg = readmemw(easeg, cpu_state.eaaddr + 4);      if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;     \
+                loadseg(seg, &sel);                     if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;     \
                 cpu_state.regs[cpu_reg].l = addr;                                   \
                                                                                 \
                 CLOCK_CYCLES(7);                                                \

@@ -54,7 +54,7 @@ int checkio(uint32_t port);
 #define check_io_perm(port) if (msw&1 && ((CPL > IOPL) || (cpu_state.eflags&VM_FLAG))) \
                         { \
                                 int tempi = checkio(port); \
-                                if (cpu_state.abrt) return 1; \
+                                if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1; \
                                 if (tempi) \
                                 { \
                                         if (cpu_state.eflags & VM_FLAG) \
@@ -68,7 +68,7 @@ int checkio(uint32_t port);
 #define SEG_CHECK_READ(seg)                             \
         do                                              \
         {                                               \
-                if ((seg)->base == 0xffffffff)          \
+                if (__builtin_expect((seg)->base == 0xffffffff, 0))          \
                 {                                       \
                         x86gpf("Segment can't read", 0);\
                         return 1;                       \
@@ -78,7 +78,7 @@ int checkio(uint32_t port);
 #define SEG_CHECK_WRITE(seg)                    \
         do                                              \
         {                                               \
-                if ((seg)->base == 0xffffffff)          \
+                if (__builtin_expect((seg)->base == 0xffffffff, 0))          \
                 {                                       \
                         x86gpf("Segment can't write", 0);\
                         return 1;                       \
@@ -165,7 +165,7 @@ static __inline uint8_t fastreadb(uint32_t a)
         if ((a >> 12) == pccache)
                 return *((uint8_t *)&pccache2[a]);
         t = getpccache(a);
-        if (cpu_state.abrt)
+        if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false))
                 return 0;
         pccache = a >> 12;
         pccache2 = t;
@@ -184,7 +184,7 @@ static __inline uint16_t fastreadw(uint32_t a)
         }
         if ((a>>12)==pccache) return *((uint16_t *)&pccache2[a]);
         t = getpccache(a);
-        if (cpu_state.abrt)
+        if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false))
                 return 0;
 
         pccache = a >> 12;
@@ -201,7 +201,7 @@ static __inline uint32_t fastreadl(uint32_t a)
                 if ((a>>12)!=pccache)
                 {
                         t = getpccache(a);
-                        if (cpu_state.abrt)
+                        if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false))
                                 return 0;
                         pccache2 = t;
                         pccache=a>>12;

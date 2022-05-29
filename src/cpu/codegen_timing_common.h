@@ -127,7 +127,7 @@ static inline uint32_t get_addr_regmask(uint64_t data, uint32_t fetchdat, int op
 
         if (data & MODRM)
         {
-                uint8_t modrm = fetchdat & 0xff;
+                const uint_fast8_t modrm = fetchdat & 0xff;
 
                 if ((modrm & 0xc0) != 0xc0)
                 {

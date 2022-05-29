@@ -14,7 +14,7 @@ static int opMOVD_l_mm_a16(uint32_t fetchdat)
                 uint32_t dst;
 
                 SEG_CHECK_READ(cpu_state.ea_seg);
-                dst = readmeml(easeg, cpu_state.eaaddr); if (cpu_state.abrt) return 1;
+                dst = readmeml(easeg, cpu_state.eaaddr); if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
                 cpu_state.MM[cpu_reg].l[0] = dst;
                 cpu_state.MM[cpu_reg].l[1] = 0;
 
@@ -38,7 +38,7 @@ static int opMOVD_l_mm_a32(uint32_t fetchdat)
                 uint32_t dst;
 
                 SEG_CHECK_READ(cpu_state.ea_seg);
-                dst = readmeml(easeg, cpu_state.eaaddr); if (cpu_state.abrt) return 1;
+                dst = readmeml(easeg, cpu_state.eaaddr); if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
                 cpu_state.MM[cpu_reg].l[0] = dst;
                 cpu_state.MM[cpu_reg].l[1] = 0;
 
@@ -61,7 +61,7 @@ static int opMOVD_mm_l_a16(uint32_t fetchdat)
         {
                 SEG_CHECK_WRITE(cpu_state.ea_seg);
                 CHECK_WRITE_COMMON(cpu_state.ea_seg, cpu_state.eaaddr, cpu_state.eaaddr + 3);
-                writememl(easeg, cpu_state.eaaddr, cpu_state.MM[cpu_reg].l[0]); if (cpu_state.abrt) return 1;
+                writememl(easeg, cpu_state.eaaddr, cpu_state.MM[cpu_reg].l[0]); if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
                 CLOCK_CYCLES(2);
         }
         return 0;
@@ -80,7 +80,7 @@ static int opMOVD_mm_l_a32(uint32_t fetchdat)
         {
                 SEG_CHECK_WRITE(cpu_state.ea_seg);
                 CHECK_WRITE_COMMON(cpu_state.ea_seg, cpu_state.eaaddr, cpu_state.eaaddr + 3);
-                writememl(easeg, cpu_state.eaaddr, cpu_state.MM[cpu_reg].l[0]); if (cpu_state.abrt) return 1;
+                writememl(easeg, cpu_state.eaaddr, cpu_state.MM[cpu_reg].l[0]); if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
                 CLOCK_CYCLES(2);
         }
         return 0;
@@ -105,7 +105,7 @@ static int opMOVD_mm_l_a16_cx(uint32_t fetchdat)
         {
                 SEG_CHECK_WRITE(cpu_state.ea_seg);
                 CHECK_WRITE_COMMON(cpu_state.ea_seg, cpu_state.eaaddr, cpu_state.eaaddr + 3);
-                writememl(easeg, cpu_state.eaaddr, cpu_state.MM[cpu_reg].l[0]); if (cpu_state.abrt) return 1;
+                writememl(easeg, cpu_state.eaaddr, cpu_state.MM[cpu_reg].l[0]); if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
                 CLOCK_CYCLES(2);
         }
         return 0;
@@ -127,7 +127,7 @@ static int opMOVD_mm_l_a32_cx(uint32_t fetchdat)
         {
                 SEG_CHECK_WRITE(cpu_state.ea_seg);
                 CHECK_WRITE_COMMON(cpu_state.ea_seg, cpu_state.eaaddr, cpu_state.eaaddr + 3);
-                writememl(easeg, cpu_state.eaaddr, cpu_state.MM[cpu_reg].l[0]); if (cpu_state.abrt) return 1;
+                writememl(easeg, cpu_state.eaaddr, cpu_state.MM[cpu_reg].l[0]); if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
                 CLOCK_CYCLES(2);
         }
         return 0;
@@ -149,7 +149,7 @@ static int opMOVQ_q_mm_a16(uint32_t fetchdat)
                 uint64_t dst;
 
                 SEG_CHECK_READ(cpu_state.ea_seg);
-                dst = readmemq(easeg, cpu_state.eaaddr); if (cpu_state.abrt) return 1;
+                dst = readmemq(easeg, cpu_state.eaaddr); if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
                 cpu_state.MM[cpu_reg].q = dst;
                 CLOCK_CYCLES(2);
         }
@@ -170,7 +170,7 @@ static int opMOVQ_q_mm_a32(uint32_t fetchdat)
                 uint64_t dst;
 
                 SEG_CHECK_READ(cpu_state.ea_seg);
-                dst = readmemq(easeg, cpu_state.eaaddr); if (cpu_state.abrt) return 1;
+                dst = readmemq(easeg, cpu_state.eaaddr); if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
                 cpu_state.MM[cpu_reg].q = dst;
                 CLOCK_CYCLES(2);
         }
@@ -191,7 +191,7 @@ static int opMOVQ_mm_q_a16(uint32_t fetchdat)
         {
                 SEG_CHECK_WRITE(cpu_state.ea_seg);
                 CHECK_WRITE_COMMON(cpu_state.ea_seg, cpu_state.eaaddr, cpu_state.eaaddr + 7);
-                writememq(easeg, cpu_state.eaaddr,     cpu_state.MM[cpu_reg].q); if (cpu_state.abrt) return 1;
+                writememq(easeg, cpu_state.eaaddr,     cpu_state.MM[cpu_reg].q); if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
                 CLOCK_CYCLES(2);
         }
         return 0;
@@ -210,7 +210,7 @@ static int opMOVQ_mm_q_a32(uint32_t fetchdat)
         {
                 SEG_CHECK_WRITE(cpu_state.ea_seg);
                 CHECK_WRITE_COMMON(cpu_state.ea_seg, cpu_state.eaaddr, cpu_state.eaaddr + 7);
-                writememq(easeg, cpu_state.eaaddr,     cpu_state.MM[cpu_reg].q); if (cpu_state.abrt) return 1;
+                writememq(easeg, cpu_state.eaaddr,     cpu_state.MM[cpu_reg].q); if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;
                 CLOCK_CYCLES(2);
         }
         return 0;

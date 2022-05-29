@@ -358,40 +358,40 @@ void codegen_timing_486_opcode(uint8_t opcode, uint32_t fetchdat, int op_32, uin
                 default:
                 switch (opcode)
                 {
-                        case 0x80: case 0x82: case 0x83:
+                case 0x80: case 0x82: case 0x83:
                         timings = mod3 ? opcode_timings_8x_mod3 : opcode_timings_8x;
                         deps = mod3 ? opcode_deps_8x_mod3 : opcode_deps_8x;
                         opcode = (fetchdat >> 3) & 7;
                         break;
-                        case 0x81:
+                case 0x81:
                         timings = mod3 ? opcode_timings_81_mod3 : opcode_timings_81;
                         deps = mod3 ? opcode_deps_81_mod3 : opcode_deps_81;
                         opcode = (fetchdat >> 3) & 7;
                         break;
 
-                        case 0xc0: case 0xc1: case 0xd0: case 0xd1: case 0xd2: case 0xd3:
+                case 0xc0: case 0xc1: case 0xd0: case 0xd1: case 0xd2: case 0xd3:
                         timings = mod3 ? opcode_timings_shift_mod3 : opcode_timings_shift;
                         deps = mod3 ? opcode_deps_shift_mod3 : opcode_deps_shift;
                         opcode = (fetchdat >> 3) & 7;
                         break;
 
-                        case 0xf6:
+                case 0xf6:
                         timings = mod3 ? opcode_timings_f6_mod3 : opcode_timings_f6;
                         deps = mod3 ? opcode_deps_f6_mod3 : opcode_deps_f6;
                         opcode = (fetchdat >> 3) & 7;
                         break;
-                        case 0xf7:
+                case 0xf7:
                         timings = mod3 ? opcode_timings_f7_mod3 : opcode_timings_f7;
                         deps = mod3 ? opcode_deps_f7_mod3 : opcode_deps_f7;
                         opcode = (fetchdat >> 3) & 7;
                         break;
-                        case 0xff:
+                case 0xff:
                         timings = mod3 ? opcode_timings_ff_mod3 : opcode_timings_ff;
                         deps = mod3 ? opcode_deps_ff_mod3 : opcode_deps_ff;
                         opcode = (fetchdat >> 3) & 7;
                         break;
 
-                        default:
+                default:
                         timings = mod3 ? opcode_timings_mod3 : opcode_timings;
                         deps = mod3 ? opcode_deps_mod3 : opcode_deps;
                         break;

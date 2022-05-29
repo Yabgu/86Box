@@ -17,6 +17,7 @@
  */
 #include <math.h>
 #include <stdarg.h>
+#include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
@@ -37,7 +38,7 @@
 #include <86box/gdbstub.h>
 
 /* Is the CPU 8088 or 8086. */
-int is8086 = 0;
+bool is8086 = false;
 
 uint8_t use_custom_nmi_vector = 0;
 uint32_t custom_nmi_vector = 0x00000000;

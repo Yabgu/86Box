@@ -3,7 +3,7 @@
 
 static inline int LOAD_SP_WITH_OFFSET(ir_data_t *ir, int offset)
 {
-        if (stack32)
+        if (__builtin_expect(stack32, true))
         {
                 if (offset)
                 {
@@ -36,14 +36,14 @@ static inline int LOAD_SP(ir_data_t *ir)
 
 static inline void ADD_SP(ir_data_t *ir, int offset)
 {
-        if (stack32)
+        if (__builtin_expect(stack32, true))
                 uop_ADD_IMM(ir, IREG_ESP, IREG_ESP, offset);
         else
                 uop_ADD_IMM(ir, IREG_SP, IREG_SP, offset);
 }
 static inline void SUB_SP(ir_data_t *ir, int offset)
 {
-        if (stack32)
+        if (__builtin_expect(stack32, true))
                 uop_SUB_IMM(ir, IREG_ESP, IREG_ESP, offset);
         else
                 uop_SUB_IMM(ir, IREG_SP, IREG_SP, offset);

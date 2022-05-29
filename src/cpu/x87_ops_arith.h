@@ -5,7 +5,7 @@ static int opFADD ## name ## _a ## a_size(uint32_t fetchdat)    \
         FP_ENTER();                                             \
         fetch_ea_ ## a_size(fetchdat);                          \
 	SEG_CHECK_READ(cpu_state.ea_seg);                       \
-        load_var = get(); if (cpu_state.abrt) return 1;                   \
+        load_var = get(); if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;                   \
         if ((cpu_state.npxc >> 10) & 3)                                   \
                 fesetround(rounding_modes[(cpu_state.npxc >> 10) & 3]);   \
         ST(0) += use_var;                                       \
@@ -22,7 +22,7 @@ static int opFCOM ## name ## _a ## a_size(uint32_t fetchdat)    \
         FP_ENTER();                                             \
         fetch_ea_ ## a_size(fetchdat);                          \
 	SEG_CHECK_READ(cpu_state.ea_seg);                       \
-        load_var = get(); if (cpu_state.abrt) return 1;                   \
+        load_var = get(); if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;                   \
         cpu_state.npxs &= ~(C0|C2|C3);                                    \
         cpu_state.npxs |= x87_compare(ST(0), (double)use_var);            \
         CLOCK_CYCLES_FPU((fpu_type >= FPU_487SX) ? (x87_timings.fcom ## cycle_postfix) : ((x87_timings.fcom ## cycle_postfix) * cpu_multi));                                        \
@@ -35,7 +35,7 @@ static int opFCOMP ## name ## _a ## a_size(uint32_t fetchdat)   \
         FP_ENTER();                                             \
         fetch_ea_ ## a_size(fetchdat);                          \
 	SEG_CHECK_READ(cpu_state.ea_seg);                       \
-        load_var = get(); if (cpu_state.abrt) return 1;                   \
+        load_var = get(); if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;                   \
         cpu_state.npxs &= ~(C0|C2|C3);                                    \
         cpu_state.npxs |= x87_compare(ST(0), (double)use_var);            \
         x87_pop();                                              \
@@ -49,7 +49,7 @@ static int opFDIV ## name ## _a ## a_size(uint32_t fetchdat)    \
         FP_ENTER();                                             \
         fetch_ea_ ## a_size(fetchdat);                          \
 	SEG_CHECK_READ(cpu_state.ea_seg);                       \
-        load_var = get(); if (cpu_state.abrt) return 1;                   \
+        load_var = get(); if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;                   \
         x87_div(ST(0), ST(0), use_var);                         \
         FP_TAG_VALID;						\
         CLOCK_CYCLES_FPU((fpu_type >= FPU_487SX) ? (x87_timings.fdiv ## cycle_postfix) : ((x87_timings.fdiv ## cycle_postfix) * cpu_multi));                                       \
@@ -62,7 +62,7 @@ static int opFDIVR ## name ## _a ## a_size(uint32_t fetchdat)   \
         FP_ENTER();                                             \
         fetch_ea_ ## a_size(fetchdat);                          \
 	SEG_CHECK_READ(cpu_state.ea_seg);                       \
-        load_var = get(); if (cpu_state.abrt) return 1;                   \
+        load_var = get(); if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;                   \
         x87_div(ST(0), use_var, ST(0));                         \
         FP_TAG_VALID;						\
         CLOCK_CYCLES_FPU((fpu_type >= FPU_487SX) ? (x87_timings.fdiv ## cycle_postfix) : ((x87_timings.fdiv ## cycle_postfix) * cpu_multi));                                       \
@@ -75,7 +75,7 @@ static int opFMUL ## name ## _a ## a_size(uint32_t fetchdat)    \
         FP_ENTER();                                             \
         fetch_ea_ ## a_size(fetchdat);                          \
 	SEG_CHECK_READ(cpu_state.ea_seg);                       \
-        load_var = get(); if (cpu_state.abrt) return 1;                   \
+        load_var = get(); if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;                   \
         ST(0) *= use_var;                                       \
         FP_TAG_VALID;						\
         CLOCK_CYCLES_FPU((fpu_type >= FPU_487SX) ? (x87_timings.fmul ## cycle_postfix) : ((x87_timings.fmul ## cycle_postfix) * cpu_multi));                                       \
@@ -88,7 +88,7 @@ static int opFSUB ## name ## _a ## a_size(uint32_t fetchdat)    \
         FP_ENTER();                                             \
         fetch_ea_ ## a_size(fetchdat);                          \
 	SEG_CHECK_READ(cpu_state.ea_seg);                       \
-        load_var = get(); if (cpu_state.abrt) return 1;                   \
+        load_var = get(); if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;                   \
         ST(0) -= use_var;                                       \
         FP_TAG_VALID;						\
         CLOCK_CYCLES_FPU((fpu_type >= FPU_487SX) ? (x87_timings.fadd ## cycle_postfix) : ((x87_timings.fadd ## cycle_postfix) * cpu_multi));                                        \
@@ -101,7 +101,7 @@ static int opFSUBR ## name ## _a ## a_size(uint32_t fetchdat)   \
         FP_ENTER();                                             \
         fetch_ea_ ## a_size(fetchdat);                          \
 	SEG_CHECK_READ(cpu_state.ea_seg);                       \
-        load_var = get(); if (cpu_state.abrt) return 1;                   \
+        load_var = get(); if (__builtin_expect(cpu_state.abrt != ABRT_NONE, false)) return 1;                   \
         ST(0) = use_var - ST(0);                                \
         FP_TAG_VALID;						\
         CLOCK_CYCLES_FPU((fpu_type >= FPU_487SX) ? (x87_timings.fadd ## cycle_postfix) : ((x87_timings.fadd ## cycle_postfix) * cpu_multi));                                        \
